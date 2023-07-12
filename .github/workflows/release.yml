@@ -38,7 +38,9 @@ jobs:
         run: npm run style:check
 
       - name: Build application
-        run: npm run build -- --unlock-robots
+        run: |
+          npm pkg delete scripts.prepare
+          npm run build -- --unlock-robots
 
       - name: Create release asset
         run: zip -r build.zip build package.json package-lock.json README.md
@@ -94,14 +96,21 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,prefix={{branch}},value=${{ steps.package-version.outputs.version }}
-            type=raw,prefix=latest,value={{branch}}
+            type=raw,prefix={{branch}}-,value=${{ steps.package-version.outputs.version }}
+            type=raw,prefix=latest-,value={{branch}}
 
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v4
         with:
+          context: .
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_PATH=./build
 
   release:
     needs: [build, docker-build]

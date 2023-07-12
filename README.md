@@ -12,10 +12,8 @@ npm ci
 npm run dev
 ```
 
-
 ## Git workflow
-__NOTE: see .github and .aws for understand CI/CD__
+__NOTE: see .github for understand CI/CD__
 1. Create feature, bugfix, etc.
 2. Create Pull Request & test
-3. Squash commit & merge into `staging` & test
-4. Merge into `prod` (semantic release)
+3. Squash & merge into `prod`
