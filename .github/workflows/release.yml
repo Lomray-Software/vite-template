@@ -1,0 +1,117 @@
+name: Semantic release
+
+on:
+  push:
+    branches: [ prod, staging ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/web
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}-build
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.13.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run eslint
+        run: npm run lint:check
+
+      - name: Typescript check
+        run: npm run ts:check
+
+      - name: Stylelint check
+        run: npm run style:check
+
+      - name: Build application
+        run: npm run build -- --unlock-robots
+
+      - name: Create release asset
+        run: zip -r build.zip build package.json package-lock.json README.md
+
+      - name: Archive build
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: |
+            build
+            package.json
+            package-lock.json
+
+      - name: Archive dockerfile
+        uses: actions/upload-artifact@v3
+        with:
+          name: dockerfile-artifact
+          path: node_modules/@lomray/vite-ssr-boost/workflow/Dockerfile
+
+  docker-build:
+    needs: [build]
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}-build-docker
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: dockerfile-artifact
+
+      - name: Get version
+        id: package-version
+        run: npx @lomray/microservices-cli package-version
+
+      - name: Setup Docker buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log into registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,prefix={{branch}},value=${{ steps.package-version.outputs.version }}
+            type=raw,prefix=latest,value={{branch}}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v4
+        with:
+          tags: ${{ steps.meta.outputs.tags }}
+
+  release:
+    needs: [build, docker-build]
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}-build-docker
+      cancel-in-progress: true
+
+    steps:
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

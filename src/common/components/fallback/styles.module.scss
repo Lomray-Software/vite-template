@@ -1,0 +1,17 @@
+.loadingPane {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+}
+
+.loader {
+  animation: spin 1s linear infinite;
+  font-size: 100px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

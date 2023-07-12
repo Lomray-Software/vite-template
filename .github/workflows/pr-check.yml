@@ -1,0 +1,43 @@
+name: Check PR
+
+on:
+  pull_request:
+    branches: [ prod, staging ]
+    types: [ synchronize ]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}-check-pr
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.13.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check eslint
+        run: npm run lint:check
+
+      - name: Typescript check
+        run: npm run ts:check
+
+      - name: Stylelint check
+        run: npm run style:check
+
+      - uses: naveenk1223/action-pr-title@master
+        with:
+          # Regex the title should match.
+          regex: '^(feat|fix|perf|refactor|revert|test|test|build|chore)([(a-z-)]*):\s[a-z0-9\s,()]+$'
+          prefix_case_sensitive: true
+          min_length: 10
+          max_length: 80
