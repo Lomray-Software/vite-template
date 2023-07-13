@@ -5,8 +5,13 @@ on:
     branches: [ prod, staging ]
 
 env:
+  NODE_VERSION: 18.13.0
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/web
+  ECS_TASK_DEFINITION: ${{ github.workspace }}/.github/task-definition.json
+  ECS_TASK_CONTAINER_NAME: web
+  ECS_SERVICE: vite-template
+  ECS_CLUSTER: Development
 
 jobs:
   build:
@@ -22,7 +27,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: '18.13.0'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: Install dependencies
@@ -67,6 +72,9 @@ jobs:
     concurrency:
       group: ${{ github.ref }}-build-docker
       cancel-in-progress: true
+    outputs:
+      # get docker image tag with version
+      image-tag: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
 
     steps:
       - uses: actions/download-artifact@v3
@@ -112,6 +120,38 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             BUILD_PATH=./build
+
+  deploy:
+    needs: [ docker-build ]
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}-deploy
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Update AWS ECS Task Definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.ECS_TASK_CONTAINER_NAME }}
+          image: ${{ needs.docker-build.outputs.image-tag }}
+
+      - name: Deploy AWS ECS Task Definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
 
   release:
     needs: [build, docker-build]
