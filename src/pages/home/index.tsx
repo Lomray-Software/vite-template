@@ -3,6 +3,7 @@ import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReactLogoImg from '@assets/images/react.svg';
+import { APP_VERSION, IS_PROD } from '@constants/index';
 import RouteManager from '@services/route-manager';
 import styles from './styles.module.scss';
 
@@ -12,6 +13,8 @@ import styles from './styles.module.scss';
  */
 const Home: FCRoute = () => {
   const [count, setCount] = useState(0);
+  // show only on deployed application
+  const hasVersion = IS_PROD && !APP_VERSION.startsWith('APP_');
 
   return (
     <>
@@ -20,6 +23,11 @@ const Home: FCRoute = () => {
         <meta name="description" content="Home page" />
       </Meta>
       <div>SPA, SSR, Mobx, Consistent Suspense, Meta tags</div>
+      {hasVersion && (
+        <div>
+          Version: <strong>{APP_VERSION}</strong>
+        </div>
+      )}
       <div>
         <a href="https://vitejs.dev/" target="_blank">
           <img src="/vite.svg" className={styles.logo} alt="Vite logo" />

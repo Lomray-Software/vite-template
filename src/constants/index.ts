@@ -5,3 +5,6 @@ export const IS_CLIENT = typeof window !== 'undefined';
 export const IS_PROD = import.meta.env.MODE === 'production';
 
 export const API_GATEWAY = import.meta.env.VITE_API_GATEWAY;
+
+// will be replaced in github workflows
+export const APP_VERSION = 'APP_VERSION';

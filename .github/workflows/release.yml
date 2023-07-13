@@ -18,8 +18,34 @@ jobs:
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
 
+  # inject actual version to app (only demo)
+  inject-version:
+    needs: [release]
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}-inject-version
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+
+      - name: Inject version
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: '"APP_VERSION"'
+          replace: '"${{ needs.release.outputs.version }}"'
+          regex: false
+
+      - name: App build
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: ${{ github.workspace }}
+
   docker-build:
-    needs: [build, release]
+    needs: [release, inject-version]
     uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-docker-build.yml@staging
     with:
       registry: ghcr.io
