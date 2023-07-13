@@ -59,32 +59,7 @@
   "placementConstraints": [],
   "memory": "100",
   "taskRoleArn": "arn:aws:iam::771350349623:role/ECSTaskDefinitionRole",
-  "compatibilities": [
-    "EXTERNAL",
-    "EC2"
-  ],
-  "taskDefinitionArn": "arn:aws:ecs:eu-west-1:771350349623:task-definition/vite-template:2",
   "family": "vite-template",
-  "requiresAttributes": [
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "ecs.capability.private-registry-authentication.secretsmanager"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.task-iam-role"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-    }
-  ],
   "pidMode": null,
   "requiresCompatibilities": [
     "EC2"
@@ -92,8 +67,6 @@
   "networkMode": "bridge",
   "runtimePlatform": null,
   "cpu": null,
-  "revision": 2,
-  "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
   "volumes": []

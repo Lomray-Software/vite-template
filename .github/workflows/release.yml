@@ -6,9 +6,12 @@ on:
 
 env:
   NODE_VERSION: 18.13.0
+  APP_BUILD_ARGS: --unlock-robots
+  APP_BUILD_PATH: ./build
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/web
-  ECS_TASK_DEFINITION: ${{ github.workspace }}/.github/task-definition.json
+  DOCKER_FILE: node_modules/@lomray/vite-ssr-boost/workflow/Dockerfile
+  ECS_TASK_DEFINITION: .github/task-definition.json
   ECS_TASK_CONTAINER_NAME: web
   ECS_SERVICE: vite-template
   ECS_CLUSTER: Development
@@ -45,7 +48,7 @@ jobs:
       - name: Build application
         run: |
           npm pkg delete scripts.prepare
-          npm run build -- --unlock-robots
+          npm run build -- ${{ env.APP_BUILD_ARGS }}
 
       - name: Create release asset
         run: zip -r build.zip build package.json package-lock.json README.md
@@ -64,10 +67,41 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dockerfile-artifact
-          path: node_modules/@lomray/vite-ssr-boost/workflow/Dockerfile
+          path: ${{ env.DOCKER_FILE }}
+
+      - name: Archive AWS task definition
+        uses: actions/upload-artifact@v3
+        with:
+          name: aws-task-definition-artifact
+          path: ${{ env.ECS_TASK_DEFINITION }}
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}-release
+      cancel-in-progress: true
+    outputs:
+      version: ${{ steps.package-version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+
+      - name: Get version
+        id: package-version
+        run: npx @lomray/microservices-cli package-version
 
   docker-build:
-    needs: [build]
+    needs: [build, release]
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.ref }}-build-docker
@@ -85,10 +119,6 @@ jobs:
         with:
           name: dockerfile-artifact
 
-      - name: Get version
-        id: package-version
-        run: npx @lomray/microservices-cli package-version
-
       - name: Setup Docker buildx
         uses: docker/setup-buildx-action@v2
 
@@ -105,7 +135,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,prefix={{branch}}-,value=${{ steps.package-version.outputs.version }}
+            type=raw,prefix={{branch}}-,value=${{ needs.release.outputs.version }}
             type=raw,prefix=latest-,value={{branch}}
 
       - name: Build and push Docker image
@@ -119,7 +149,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILD_PATH=./build
+            BUILD_PATH=${{ env.APP_BUILD_PATH }}
 
   deploy:
     needs: [ docker-build ]
@@ -129,7 +159,9 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: aws-task-definition-artifact
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -142,7 +174,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          task-definition: task-definition.json
           container-name: ${{ env.ECS_TASK_CONTAINER_NAME }}
           image: ${{ needs.docker-build.outputs.image-tag }}
 
@@ -152,22 +184,3 @@ jobs:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
-
-  release:
-    needs: [build, docker-build]
-    runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.ref }}-build-docker
-      cancel-in-progress: true
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: build-artifact
-
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
