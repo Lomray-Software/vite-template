@@ -10,6 +10,10 @@ on:
     secrets:
       github-token:
         required: true
+    outputs:
+      version:
+        description: "New package version"
+        value: ${{ jobs.release.outputs.version }}
 
 jobs:
   release:

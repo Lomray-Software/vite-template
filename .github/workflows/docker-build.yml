@@ -18,6 +18,10 @@ on:
     secrets:
       github-token:
         required: true
+    outputs:
+      image-tag:
+        description: "Docker image with new tag version"
+        value: ${{ jobs.docker-build.outputs.image-tag }}
 
 jobs:
   docker-build:
