@@ -52,6 +52,16 @@ jobs:
           npm pkg delete scripts.prepare
           npm run build -- ${{ inputs.app-build-args }}
 
+      - name: Prepare docker file
+        if: ${{ inputs.docker-file != '' }}
+        shell: bash
+        id: prepare-docker
+        run: |
+          # ignore errors
+          set +e
+          cp ${{ inputs.docker-file }} Dockerfile
+          echo "docker-file-name=Dockerfile" >> $GITHUB_OUTPUT
+
       - name: Archive build
         uses: actions/upload-artifact@v3
         with:
@@ -60,4 +70,4 @@ jobs:
             build
             package.json
             package-lock.json
-            ${{ inputs.docker-file }}
+            ${{ steps.prepare-docker.outputs.docker-file-name }}

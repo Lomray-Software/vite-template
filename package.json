@@ -33,7 +33,7 @@
     "@commitlint/config-conventional": "^17.6.6",
     "@lomray/eslint-config": "^3.0.0",
     "@lomray/prettier-config": "^1.2.0",
-    "@lomray/stylelint-config": "^1.4.0",
+    "@lomray/stylelint-config": "^1.4.1",
     "@semantic-release/exec": "^6.0.3",
     "@types/node": "^20.3.3",
     "@types/react": "^18.0.37",
