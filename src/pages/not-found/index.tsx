@@ -3,7 +3,7 @@ import ResponseStatus from '@lomray/vite-ssr-boost/components/response-status';
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import { isRouteErrorResponse, Link, useRouteError } from 'react-router-dom';
 import { IS_PROD } from '@constants/index';
-import Router from '@services/router';
+import RouteManager from '@services/route-manager';
 
 /**
  * Not found page
@@ -21,7 +21,7 @@ const NotFound: FCRoute = () => {
         <ResponseStatus status={404} />
         <div>Opps. Page not found. Status: {error.status}</div>
         <div className="mr20">
-          <Link to={Router.makeURL('home')}>Go home</Link>
+          <Link to={RouteManager.makeURL('home')}>Go home</Link>
         </div>
       </>
     );
@@ -33,7 +33,7 @@ const NotFound: FCRoute = () => {
       {!IS_PROD && <div>Message: {error?.message ?? 'unknown'}</div>}
       {!IS_PROD && <div>Stack: {error?.stack}</div>}
       <div className="mr20">
-        <Link to={Router.makeURL('home')}>Go home</Link>
+        <Link to={RouteManager.makeURL('home')}>Go home</Link>
       </div>
     </>
   );

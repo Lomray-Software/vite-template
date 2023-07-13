@@ -3,7 +3,7 @@ import SuspenseQuery from '@lomray/react-mobx-manager/suspense-query';
 /**
  * Error boundary page store
  */
-class ErrorBoundaryStore {
+class MainStore {
   /**
    * Suspense service
    */
@@ -29,4 +29,4 @@ class ErrorBoundaryStore {
   };
 }
 
-export default ErrorBoundaryStore;
+export default MainStore;

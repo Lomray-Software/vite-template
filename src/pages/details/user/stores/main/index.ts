@@ -7,7 +7,7 @@ import type { IUser } from '@interfaces/user';
 /**
  * User detail page store
  */
-class UserDetailStore {
+class MainStore {
   /**
    * User
    */
@@ -59,4 +59,4 @@ class UserDetailStore {
   };
 }
 
-export default UserDetailStore;
+export default MainStore;

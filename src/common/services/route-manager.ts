@@ -1,9 +1,9 @@
-import Router from '@lomray/client-helpers-react/services/router';
+import { Manager } from '@lomray/react-route-manager';
 
 /**
- * Application URL router
+ * Application URL manager
  */
-const router = new Router({
+const manager = new Manager({
   routes: {
     home: {
       url: '/',
@@ -26,4 +26,4 @@ const router = new Router({
   },
 });
 
-export default router;
+export default manager;

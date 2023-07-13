@@ -16,11 +16,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@lomray/client-helpers-react": "^2.0.0",
     "@lomray/consistent-suspense": "^1.2.2",
     "@lomray/react-head-manager": "^1.1.0",
-    "@lomray/react-mobx-manager": "^2.0.0-beta.15",
-    "@lomray/vite-ssr-boost": "^1.0.0-beta.9",
+    "@lomray/react-mobx-manager": "^2.0.0-beta.19",
+    "@lomray/react-route-manager": "^1.0.0",
+    "@lomray/vite-ssr-boost": "^1.0.0-beta.13",
     "axios": "^1.4.0",
     "mobx": "^6.9.0",
     "mobx-react-lite": "^3.4.3",

@@ -3,7 +3,7 @@ import { Meta } from '@lomray/react-head-manager';
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import { Link, useLoaderData } from 'react-router-dom';
 import Fallback from '@components/fallback';
-import Router from '@services/router';
+import RouteManager from '@services/route-manager';
 import User from './components/user';
 // import Navigate from '@lomray/vite-ssr-boost/components/navigate';
 
@@ -46,7 +46,7 @@ const Details: FCRoute = () => {
         </Suspense>
       </div>
       <div className="mr20">
-        <Link to={Router.makeURL('home')}>Go back</Link>
+        <Link to={RouteManager.makeURL('home')}>Go back</Link>
       </div>
     </>
   );

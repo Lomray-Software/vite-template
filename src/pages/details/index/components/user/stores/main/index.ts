@@ -7,7 +7,7 @@ import type { IUser } from '@interfaces/user';
 /**
  * Details user component store
  */
-class DetaisUserStore {
+class MainStore {
   /**
    * User
    */
@@ -98,4 +98,4 @@ class DetaisUserStore {
   };
 }
 
-export default DetaisUserStore;
+export default MainStore;

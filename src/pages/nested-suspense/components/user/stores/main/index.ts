@@ -5,11 +5,9 @@ import { API_GATEWAY } from '@constants/index';
 import type { IUser } from '@interfaces/user';
 
 /**
- * User detail page store
- *
- * @mobx-store
+ * User detail store
  */
-class UserDetailStore {
+class MainStore {
   /**
    * User
    */
@@ -57,4 +55,4 @@ class UserDetailStore {
   };
 }
 
-export default UserDetailStore;
+export default MainStore;

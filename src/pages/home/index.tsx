@@ -3,7 +3,7 @@ import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReactLogoImg from '@assets/images/react.svg';
-import Router from '@services/router';
+import RouteManager from '@services/route-manager';
 import styles from './styles.module.scss';
 
 /**
@@ -31,16 +31,21 @@ const Home: FCRoute = () => {
       <div className={styles.card}>
         <button onClick={() => setCount((c) => c + 1)}>count is {count}</button>
         <p>
-          <Link to={Router.makeURL('details')}>How to works Suspense?</Link>
+          <Link to={RouteManager.makeURL('details')}>How to works Suspense?</Link>
         </p>
         <p>
-          <Link to={Router.makeURL('errorBoundary')}>Investigate error boundary.</Link>
+          <Link to={RouteManager.makeURL('errorBoundary')}>Investigate error boundary.</Link>
         </p>
         <p>
-          <Link to={Router.makeURL('nestedSuspense')}>What about nested Suspense?</Link>
+          <Link to={RouteManager.makeURL('nestedSuspense')}>What about nested Suspense?</Link>
         </p>
       </div>
       <p className={styles.navigateExplain}>Click on the links to learn more</p>
+      <p className={styles.navigateExplain}>
+        <a href="https://github.com/Lomray-Software/vite-template" target="_blank" rel="nofollow">
+          Open repository
+        </a>
+      </p>
     </>
   );
 };

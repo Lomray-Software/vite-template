@@ -2,7 +2,7 @@ import { Meta } from '@lomray/react-head-manager';
 import { withStores } from '@lomray/react-mobx-manager';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
-import Router from '@services/router';
+import RouteManager from '@services/route-manager';
 import type { StoreProps } from './index.stores';
 import stores from './index.stores';
 
@@ -29,7 +29,7 @@ const User: FC<Props> = ({ userId, mainStore: { user, suspense, getUser } }) => 
       )}
       <div>
         User from suspense:{' '}
-        <Link to={Router.makeURL('details.user', { id: user!.id })}>
+        <Link to={RouteManager.makeURL('details.user', { id: user!.id })}>
           {user?.id} ({user?.name})
         </Link>
       </div>

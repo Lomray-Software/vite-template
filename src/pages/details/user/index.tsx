@@ -4,7 +4,7 @@ import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import { Link, useParams } from 'react-router-dom';
 import DefaultSuspense from '@components/default-suspense';
 import ErrorBoundary from '@components/error-boundary-route';
-import Router from '@services/router';
+import RouteManager from '@services/route-manager';
 import type { StoreProps } from './index.stores';
 import stores from './index.stores';
 import styles from './styles.module.scss';
@@ -33,7 +33,7 @@ const User: FCRoute<StoreProps> = ({ mainStore: { user, suspense, getUser } }) =
         </p>
       </div>
       <div className="mr20">
-        <Link to={Router.makeURL('details')}>Go back</Link>
+        <Link to={RouteManager.makeURL('details')}>Go back</Link>
       </div>
     </>
   );
