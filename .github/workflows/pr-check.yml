@@ -2,8 +2,11 @@ name: Check PR
 
 on:
   pull_request:
-    branches: [ prod, staging ]
+    branches: [ prod ]
     types: [ synchronize ]
+
+env:
+  NODE_VERSION: 18.13.0
 
 jobs:
   check:
@@ -19,7 +22,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: '18.13.0'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: Install dependencies
