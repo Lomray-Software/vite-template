@@ -1,4 +1,4 @@
-name: Semantic release
+name: Release app
 
 on:
   push:
@@ -6,13 +6,13 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yml
+    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-build.yml@staging
     with:
       app-build-args: --unlock-robots
 
   release:
     needs: [build]
-    uses: ./.github/workflows/release-r.yml
+    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-release.yml@staging
     with:
       has-release-asset: true
     secrets:
@@ -20,7 +20,7 @@ jobs:
 
   docker-build:
     needs: [build, release]
-    uses: ./.github/workflows/docker-build.yml
+    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-docker-build.yml@staging
     with:
       registry: ghcr.io
       image-name: ${{ github.repository }}/web
@@ -31,7 +31,7 @@ jobs:
 
   deploy-aws:
     needs: [docker-build]
-    uses: ./.github/workflows/deploy-aws.yml
+    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-deploy-aws.yml@staging
     with:
       image: ${{ needs.docker-build.outputs.image-tag }}
       service: vite-template
