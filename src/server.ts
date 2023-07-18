@@ -4,6 +4,8 @@ import MetaServer from '@lomray/react-head-manager/server';
 import { Manager } from '@lomray/react-mobx-manager';
 import ManagerStream from '@lomray/react-mobx-manager/manager-stream';
 import entryServer from '@lomray/vite-ssr-boost/node/entry';
+import CookieParser from 'cookie-parser';
+import isBot from 'isbot';
 import { enableStaticRendering } from 'mobx-react-lite';
 import StateKey from '@constants/state-key';
 import routes from '@routes/index';
@@ -18,8 +20,10 @@ export default entryServer(App, routes, {
     /**
      * Once after create server
      */
-    onServerCreated: () => {
+    onServerCreated: (app) => {
       enableStaticRendering(true);
+
+      app.use(CookieParser());
     },
     /**
      * For each request:
@@ -51,12 +55,8 @@ export default entryServer(App, routes, {
     /**
      * We can control stream mode here
      */
-    onRouterReady: () => {
-      const isStream = true;
-
-      // const disable =
-      //   isBot(userAgent) &&
-      //   !['googlebot', 'some-other-bot'].some(n => userAgent.toLowerCase().includes(n))
+    onRouterReady: ({ context: { req } }) => {
+      const isStream = !isBot(req.get('user-agent')) && req.cookies?.isCrawler !== '1';
 
       return {
         isStream,
