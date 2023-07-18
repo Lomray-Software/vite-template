@@ -9,7 +9,7 @@
  - [CONSISTENT SUSPENSE](https://github.com/Lomray-Software/consistent-suspense)
  - [REACT MOBX MANAGER](https://github.com/Lomray-Software/react-mobx-manager)
  - [REACT HEAD MANAGER](https://github.com/Lomray-Software/react-head-manager)
- - [SUGAR ROUTE MANAGER](https://github.com/Lomray-Software/react-route-manager)
+ - [REACT ROUTE MANAGER](https://github.com/Lomray-Software/react-route-manager)
 
 # Local development
 

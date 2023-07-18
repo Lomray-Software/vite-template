@@ -1,6 +1,7 @@
 import type { TRouteObject } from '@lomray/vite-ssr-boost/interfaces/route-object';
 import NotFound from '@pages/not-found';
 import RouteManager from '@services/route-manager';
+import DetailsRoutes from './details';
 
 /**
  * Application routes
@@ -15,16 +16,7 @@ const routes: TRouteObject[] = [
       },
       {
         path: RouteManager.path('details'),
-        children: [
-          {
-            index: true,
-            lazyNR: () => import('@pages/details/index'),
-          },
-          {
-            path: RouteManager.path('details.user'),
-            lazyNR: () => import('@pages/details/user'),
-          },
-        ],
+        children: DetailsRoutes,
       },
       {
         path: RouteManager.path('errorBoundary'),
@@ -33,6 +25,10 @@ const routes: TRouteObject[] = [
       {
         path: RouteManager.path('nestedSuspense'),
         lazyNR: () => import('@pages/nested-suspense'),
+      },
+      {
+        path: RouteManager.path('redirect'),
+        lazyNR: () => import('@pages/redirect'),
       },
     ],
   },

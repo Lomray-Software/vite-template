@@ -23,6 +23,9 @@ const manager = new Manager({
     nestedSuspense: {
       url: '/nested-suspense',
     },
+    redirect: {
+      url: 'redirect-demo',
+    },
   },
 });
 

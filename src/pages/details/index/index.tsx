@@ -2,10 +2,9 @@ import { Suspense, useId } from '@lomray/consistent-suspense';
 import { Meta } from '@lomray/react-head-manager';
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import { Link, useLoaderData } from 'react-router-dom';
-import Fallback from '@components/fallback';
 import RouteManager from '@services/route-manager';
+import UserPlaceholder from './components/placeholder';
 import User from './components/user';
-// import Navigate from '@lomray/vite-ssr-boost/components/navigate';
 
 interface ILoaderData {
   userIds: string[];
@@ -27,11 +26,10 @@ const Details: FCRoute = () => {
         This is about page. Stable ids: <strong>{id1}</strong> and <strong>{id2}</strong>
       </p>
       <p>
-        Loader user ids: <strong>{userIds.join(', ')}</strong>
+        Load users for id's: <strong>{userIds.join(', ')}</strong>
       </p>
-      {/*{import.meta.env.SSR && <Navigate to="/works" />}*/}
       <div>
-        <Suspense fallback={<Fallback />}>
+        <Suspense fallback={<UserPlaceholder count={2} />}>
           <>
             <Suspense.NS>
               <User userId="user-1" />
@@ -41,7 +39,7 @@ const Details: FCRoute = () => {
             </Suspense.NS>
           </>
         </Suspense>
-        <Suspense fallback={<Fallback />}>
+        <Suspense fallback={<UserPlaceholder />}>
           <User userId="user-2" />
         </Suspense>
       </div>

@@ -30,10 +30,16 @@ const Home: FCRoute = () => {
       )}
       <div>
         <a href="https://vitejs.dev/" target="_blank">
-          <img src="/vite.svg" className={styles.logo} alt="Vite logo" />
+          <img src="/vite.svg" className={styles.logo} width="145" height="145" alt="Vite logo" />
         </a>
         <a href="https://react.dev" target="_blank">
-          <img src={ReactLogoImg} className={styles.logo} alt="React logo" />
+          <img
+            src={ReactLogoImg}
+            className={styles.logo}
+            width="145"
+            height="145"
+            alt="React logo"
+          />
         </a>
       </div>
       <div className={styles.card}>
@@ -46,6 +52,9 @@ const Home: FCRoute = () => {
         </p>
         <p>
           <Link to={RouteManager.makeURL('nestedSuspense')}>What about nested Suspense?</Link>
+        </p>
+        <p>
+          <Link to={RouteManager.makeURL('redirect')}>Redirect demo</Link>
         </p>
       </div>
       <p className={styles.navigateExplain}>Click on the links to learn more</p>

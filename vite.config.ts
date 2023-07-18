@@ -11,5 +11,5 @@ export default defineConfig({
   build: {
     outDir: '../build',
   },
-  plugins: [SsrBoost({ abortDelay: 20000 }), react(), MobxManager()],
+  plugins: [SsrBoost(), react(), MobxManager()],
 });

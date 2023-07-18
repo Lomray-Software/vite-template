@@ -13,6 +13,7 @@ import App from './app';
  * Configure server
  */
 export default entryServer(App, routes, {
+  abortDelay: 20000,
   init: () => ({
     /**
      * Once after create server

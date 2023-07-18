@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import RouteManager from '@services/route-manager';
 import type { StoreProps } from './index.stores';
 import stores from './index.stores';
+import styles from './styles.module.scss';
 
 interface IUser {
   userId: string;
@@ -28,8 +29,8 @@ const User: FC<Props> = ({ userId, mainStore: { user, suspense, getUser } }) => 
         </Meta>
       )}
       <div>
-        User from suspense:{' '}
-        <Link to={RouteManager.makeURL('details.user', { id: user!.id })}>
+        <span className={styles.col}>User from suspense:</span>{' '}
+        <Link to={RouteManager.makeURL('details.user', { id: user?.id ?? '' })}>
           {user?.id} ({user?.name})
         </Link>
       </div>
