@@ -31,7 +31,7 @@ export default entryServer(App, routes, {
      * 2. Create meta manager
      * 3. Listen stream to add mobx suspense stores to output
      */
-    onRequest: async () => {
+    onRequest: async (req) => {
       const storeManager = new Manager({
         options: { shouldDisablePersist: true },
       });
@@ -50,6 +50,8 @@ export default entryServer(App, routes, {
           metaManager,
           streamSuspense,
         },
+        // disable 103 early hints for AWS ALB
+        hasEarlyHints: !req.get('User-Agent')?.includes('ELB-HealthChecker') ?? true,
       };
     },
     /**
