@@ -12,7 +12,7 @@ const routes: TRouteObject[] = [
     children: [
       {
         path: RouteManager.path('home'),
-        lazyNR: () => import('@pages/home'),
+        lazy: () => import('@pages/home'),
       },
       {
         path: RouteManager.path('details'),
@@ -20,15 +20,15 @@ const routes: TRouteObject[] = [
       },
       {
         path: RouteManager.path('errorBoundary'),
-        lazyNR: () => import('@pages/error-boundary'),
+        lazy: () => import('@pages/error-boundary'),
       },
       {
         path: RouteManager.path('nestedSuspense'),
-        lazyNR: () => import('@pages/nested-suspense'),
+        lazy: () => import('@pages/nested-suspense'),
       },
       {
         path: RouteManager.path('redirect'),
-        lazyNR: () => import('@pages/redirect'),
+        lazy: () => import('@pages/redirect'),
       },
     ],
   },

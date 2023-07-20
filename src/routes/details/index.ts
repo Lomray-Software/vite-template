@@ -7,11 +7,11 @@ import RouteManager from '@services/route-manager';
 const detailsRoutes: TRouteObject[] = [
   {
     index: true,
-    lazyNR: () => import('@pages/details/index'),
+    lazy: () => import('@pages/details/index'),
   },
   {
     path: RouteManager.path('details.user'),
-    lazyNR: () => import('@pages/details/user'),
+    lazy: () => import('@pages/details/user'),
   },
 ];
 
