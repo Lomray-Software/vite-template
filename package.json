@@ -18,9 +18,9 @@
   "dependencies": {
     "@lomray/consistent-suspense": "^1.3.0",
     "@lomray/react-head-manager": "^1.1.0",
-    "@lomray/react-mobx-manager": "^2.0.0-beta.20",
+    "@lomray/react-mobx-manager": "^2.0.0-beta.21",
     "@lomray/react-route-manager": "^1.0.0",
-    "@lomray/vite-ssr-boost": "^1.0.0-beta.24",
+    "@lomray/vite-ssr-boost": "^1.0.0-beta.26",
     "axios": "^1.4.0",
     "cookie-parser": "^1.4.6",
     "isbot": "^3.6.12",
@@ -61,6 +61,6 @@
     "semantic-release": "^21.0.7",
     "stylelint": "^15.10.2",
     "typescript": "^5.1.6",
-    "vite": "^4.4.4"
+    "vite": "^4.4.6"
   }
 }
