@@ -1,4 +1,5 @@
 import type { TRouteObject } from '@lomray/vite-ssr-boost/interfaces/route-object';
+import AppLayout from '@components/layouts/app';
 import NotFound from '@pages/not-found';
 import RouteManager from '@services/route-manager';
 import DetailsRoutes from './details';
@@ -9,6 +10,7 @@ import DetailsRoutes from './details';
 const routes: TRouteObject[] = [
   {
     ErrorBoundary: NotFound,
+    Component: AppLayout,
     children: [
       {
         path: RouteManager.path('home'),
