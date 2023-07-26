@@ -19,6 +19,15 @@ npm ci
 npm run dev
 ```
 
+## Structure
+- `constants/index` - configure application constants
+- `common/services/route-manager` - configure site routes
+
+## Bundle analyze
+```bash
+vite-bundle-visualizer
+```
+
 ## Git workflow
 __NOTE: see .github for understand CI/CD__
 1. Create feature, bugfix, etc.

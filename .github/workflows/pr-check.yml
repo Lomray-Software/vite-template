@@ -37,6 +37,9 @@ jobs:
       - name: Stylelint check
         run: npm run style:check
 
+      - name: Build check
+        run: npm run build
+
       - uses: naveenk1223/action-pr-title@master
         with:
           # Regex the title should match.
