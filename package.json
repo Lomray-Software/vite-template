@@ -20,7 +20,7 @@
     "@lomray/react-head-manager": "^1.1.1",
     "@lomray/react-mobx-manager": "^2.0.0-beta.21",
     "@lomray/react-route-manager": "^1.1.0",
-    "@lomray/vite-ssr-boost": "^1.0.0-beta.34",
+    "@lomray/vite-ssr-boost": "^1.0.0-beta.35",
     "axios": "^1.4.0",
     "cookie-parser": "^1.4.6",
     "isbot": "^3.6.12",

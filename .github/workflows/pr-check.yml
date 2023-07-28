@@ -38,7 +38,7 @@ jobs:
         run: npm run style:check
 
       - name: Build check
-        run: npm run build
+        run: npm run build -- --throw-warnings
 
       - uses: naveenk1223/action-pr-title@master
         with:
