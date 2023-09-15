@@ -6,13 +6,13 @@ on:
 
 jobs:
   build:
-    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-build.yml@staging
+    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-build.yml@prod
     with:
       app-build-args: --unlock-robots
 
   release:
     needs: [build]
-    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-release.yml@staging
+    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-release.yml@prod
     with:
       has-release-asset: true
     secrets:
@@ -46,7 +46,7 @@ jobs:
 
   docker-build:
     needs: [release, inject-version]
-    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-docker-build.yml@staging
+    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-docker-build.yml@prod
     with:
       registry: ghcr.io
       image-name: ${{ github.repository }}/web
@@ -57,7 +57,7 @@ jobs:
 
   deploy-aws:
     needs: [docker-build]
-    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-deploy-aws.yml@staging
+    uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-deploy-aws.yml@prod
     with:
       image: ${{ needs.docker-build.outputs.image-tag }}
       service: vite-template
