@@ -21,7 +21,7 @@ export default {
     [
       '@semantic-release/exec',
       {
-        prepareCmd: 'npm version ${nextRelease.version} --no-git-tag-version',
+        prepareCmd: 'npm version ${nextRelease.version} --no-git-tag-version --silent',
       }
     ]
   ]
