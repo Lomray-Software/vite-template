@@ -1,6 +1,7 @@
 import { Suspense } from '@lomray/consistent-suspense';
 import { withStores } from '@lomray/react-mobx-manager';
 import type { FC } from 'react';
+import { useMemo } from 'react';
 import Fallback from '@components/fallback';
 import type { IUser as IUserEntity } from '@interfaces/user';
 import type { StoreProps } from './index.stores';
@@ -24,7 +25,21 @@ const User: FC<TProps> = ({ id, fields, mainStore: { user, suspense, getUser } }
     return null;
   }
 
+  // get value user filed from API
   suspense.query(() => getUser(id, field));
+
+  /**
+   * WARNING: Nested Suspense should be memorized for preventing:
+   * "This Suspense boundary received an update before it finished hydrating."
+   */
+  const children = useMemo(
+    () => (
+      <Suspense fallback={<Fallback />}>
+        <UserWrapper id={id} fields={restFields} />
+      </Suspense>
+    ),
+    [],
+  );
 
   return (
     <>
@@ -32,9 +47,7 @@ const User: FC<TProps> = ({ id, fields, mainStore: { user, suspense, getUser } }
         <p>
           <strong>{field}:</strong> {user?.[field]}
         </p>
-        <Suspense fallback={<Fallback />}>
-          <UserWrapper id={id} fields={restFields} />
-        </Suspense>
+        {children}
       </div>
     </>
   );

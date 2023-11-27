@@ -1,5 +1,6 @@
 import { Meta } from '@lomray/react-head-manager';
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
+import cn from 'classnames';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
@@ -45,17 +46,25 @@ const Home: FCRoute = () => {
           Version: <strong>{APP_VERSION}</strong>
         </div>
       )}
-      <div>
-        <a href="https://vitejs.dev/" target="_blank">
-          <img src="/vite.svg" className={styles.logo} width="145" height="145" alt="Vite logo" />
+      <div className={styles.logos}>
+        <a href="https://vitejs.dev/" target="_blank" rel="nofollow">
+          <img src="/vite.svg" className={styles.logo} alt="Vite logo" />
         </a>
-        <a href="https://react.dev" target="_blank">
+        <a href="https://react.dev" target="_blank" rel="nofollow">
+          <img src={ReactLogoImg} className={styles.logo} alt="React logo" />
+        </a>
+        <a href="https://github.com/Lomray-Software/vite-ssr-boost" target="_blank">
           <img
-            src={ReactLogoImg}
-            className={styles.logo}
-            width="145"
-            height="145"
-            alt="React logo"
+            src="https://raw.githubusercontent.com/Lomray-Software/vite-ssr-boost/prod/logo.png"
+            className={cn(styles.logo, styles.logoBoost)}
+            alt="SSR Boost logo"
+          />
+        </a>
+        <a href="https://github.com/Lomray-Software/react-mobx-manager" target="_blank">
+          <img
+            src="https://raw.githubusercontent.com/Lomray-Software/react-mobx-manager/prod/logo.png"
+            className={cn(styles.logo, styles.logoBoost)}
+            alt="Mobx Store Manager logo"
           />
         </a>
       </div>

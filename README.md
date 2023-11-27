@@ -4,7 +4,7 @@
 [Testing SPA amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)  
 [Testing SSR docker](https://vite-template.lomray.com/)
 
-## Used technologies
+## Used libraries
  - [VITE SSR BOOST](https://github.com/Lomray-Software/vite-ssr-boost)
  - [CONSISTENT SUSPENSE](https://github.com/Lomray-Software/consistent-suspense)
  - [REACT MOBX MANAGER](https://github.com/Lomray-Software/react-mobx-manager)
