@@ -13,7 +13,7 @@ const routes: TRouteObject[] = [
     Component: AppLayout,
     children: [
       {
-        path: RouteManager.path('home'),
+        index: true,
         lazy: () => import('@pages/home'),
       },
       {
