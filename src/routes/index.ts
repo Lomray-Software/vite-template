@@ -2,6 +2,7 @@ import type { TRouteObject } from '@lomray/vite-ssr-boost/interfaces/route-objec
 import AppLayout from '@components/layouts/app';
 import NotFound from '@pages/not-found';
 import NotLazyPage from '@pages/not-lazy';
+import { languageCheck } from '@services/localization';
 import RouteManager from '@services/route-manager';
 import DetailsRoutes from './details';
 
@@ -12,6 +13,8 @@ const routes: TRouteObject[] = [
   {
     ErrorBoundary: NotFound,
     Component: AppLayout,
+    path: '/:lang?',
+    loader: ({ params }) => languageCheck(params?.lang),
     children: [
       {
         index: true,

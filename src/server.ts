@@ -7,9 +7,11 @@ import entryServer from '@lomray/vite-ssr-boost/node/entry';
 import CookieParser from 'cookie-parser';
 import { createIsbotFromList, list, isbotPatterns } from 'isbot';
 import { enableStaticRendering } from 'mobx-react-lite';
+import resources from '@assets/locales/namespaces';
 import StateKey from '@constants/state-key';
 import type { ICookies } from '@interfaces/cookies.ts';
 import routes from '@routes/index';
+import { initLocalization } from '@services/localization';
 import App from './app';
 
 /**
@@ -39,14 +41,22 @@ export default entryServer(App, routes, {
      * 2. Create meta manager
      * 3. Listen stream to add mobx suspense stores to output
      */
-    onRequest: async () => {
+    onRequest: async (req) => {
       const storeManager = new Manager({
         options: { shouldDisablePersist: true },
       });
       const storeManageStream = new ManagerStream(storeManager);
       const metaManager = new MetaManager();
 
-      await storeManager.init();
+      await Promise.all([
+        storeManager.init(),
+        initLocalization(
+          {
+            url: req.baseUrl,
+          },
+          { resources },
+        ),
+      ]);
 
       const streamSuspense = StreamSuspense.create((suspenseId) =>
         storeManageStream.take(suspenseId),

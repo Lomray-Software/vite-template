@@ -4,14 +4,17 @@ import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import cn from 'classnames';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useLoaderData } from 'react-router-dom';
 import ReactLogoImg from '@assets/images/react.svg';
 import { APP_VERSION, IS_PROD } from '@constants/index';
+import { getTranslation } from '@services/localization';
 import RouteManager from '@services/route-manager';
 import styles from './styles.module.scss';
 
 interface ILoaderData {
   isDefaultCrawler: boolean;
+  localizedStr: string;
 }
 
 /**
@@ -19,7 +22,8 @@ interface ILoaderData {
  * @constructor
  */
 const Home: FCRoute = () => {
-  const { isDefaultCrawler } = useLoaderData() as ILoaderData;
+  const { t } = useTranslation(['translation']);
+  const { isDefaultCrawler, localizedStr } = useLoaderData() as ILoaderData;
   const [isCrawler, setIsCrawler] = useState(isDefaultCrawler);
 
   // show only on deployed application
@@ -42,6 +46,8 @@ const Home: FCRoute = () => {
         <meta name="description" content="Home page" />
       </Meta>
       <div>SPA, SSR, Mobx, Consistent Suspense, Meta tags</div>
+      <div>Localized output: {t('translation:checkIt')}</div>
+      <div>Localized output loader: {localizedStr}</div>
       <div>
         {hasVersion && (
           <p>
@@ -102,12 +108,15 @@ const Home: FCRoute = () => {
   );
 };
 
-Home.loader = ({ request }): ILoaderData => {
+Home.loader = async ({ request }): Promise<ILoaderData> => {
+  const t = await getTranslation(['forms']);
   const isDefaultCrawler =
     request.headers.get('cookie')?.includes('isCrawler=1') ?? Cookies.get('isCrawler') === '1';
+  const localizedStr = t('forms:firstName');
 
   return {
     isDefaultCrawler,
+    localizedStr,
   };
 };
 
