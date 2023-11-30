@@ -75,7 +75,6 @@ frontend:
     build:
       commands:
         - npm run build -- --eject
-        - npm ci --omit=dev
         - npm run build:amplify
   artifacts:
     baseDirectory: .amplify-hosting
