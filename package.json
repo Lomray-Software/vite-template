@@ -5,6 +5,7 @@
   "scripts": {
     "develop": "ssr-boost dev",
     "build": "ssr-boost build",
+    "build:amplify": "ssr-boost build-amplify",
     "start:ssr": "ssr-boost start",
     "start:spa": "ssr-boost start --only-client",
     "preview": "ssr-boost preview",
@@ -20,7 +21,7 @@
     "@lomray/react-head-manager": "^1.1.1",
     "@lomray/react-mobx-manager": "^2.1.0",
     "@lomray/react-route-manager": "^1.2.1",
-    "@lomray/vite-ssr-boost": "^1.1.0",
+    "@lomray/vite-ssr-boost": "^1.2.0-beta.1",
     "axios": "^1.6.2",
     "classnames": "^2.3.2",
     "cookie-parser": "^1.4.6",

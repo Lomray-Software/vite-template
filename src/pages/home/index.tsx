@@ -1,4 +1,5 @@
 import { Meta } from '@lomray/react-head-manager';
+import { IS_SSR_MODE } from '@lomray/vite-ssr-boost/constants/common';
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import cn from 'classnames';
 import Cookies from 'js-cookie';
@@ -41,11 +42,14 @@ const Home: FCRoute = () => {
         <meta name="description" content="Home page" />
       </Meta>
       <div>SPA, SSR, Mobx, Consistent Suspense, Meta tags</div>
-      {hasVersion && (
-        <div>
-          Version: <strong>{APP_VERSION}</strong>
-        </div>
-      )}
+      <div>
+        {hasVersion && (
+          <p>
+            Version: <strong>{APP_VERSION}</strong>
+          </p>
+        )}
+        <p>Type: {IS_SSR_MODE ? 'SSR' : 'SPA'}</p>
+      </div>
       <div className={styles.logos}>
         <a href="https://vitejs.dev/" target="_blank" rel="nofollow">
           <img src="/vite.svg" className={styles.logo} alt="Vite logo" />

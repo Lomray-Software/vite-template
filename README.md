@@ -1,8 +1,9 @@
 # Vite template
 
 ## Links
-[Testing SPA amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)  
-[Testing SSR docker](https://vite-template.lomray.com/)
+[Testing SPA Amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)  
+[Testing SSR Amplify](https://prod.d947n8vxd7uac.amplifyapp.com/)  
+[Testing SSR Docker](https://vite-template.lomray.com/)
 
 ## Used libraries
  - [VITE SSR BOOST](https://github.com/Lomray-Software/vite-ssr-boost)
@@ -35,9 +36,12 @@ __NOTE: see .github for understand CI/CD__
 3. Squash & merge into `prod`
 
 ## Docker build
-[See github workflow](.github/workflows/release.yml)
+[See github workflow](.github/workflows/release.yml) or
+```bash
+ssr-boost build-docker --image-name test-image
+```
 
-## AWS Amplify build (amplify.yml)
+## AWS Amplify build (amplify.yml) - SPA
 ```yaml
 version: 1
 frontend:
@@ -51,6 +55,30 @@ frontend:
         - npm run build -- --only-client
   artifacts:
     baseDirectory: build/client
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+```
+
+## AWS Amplify build (amplify.yml) - SSR
+```yaml
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - nvm use 18.13.0
+        - npm pkg delete scripts.prepare
+        - npm ci
+    build:
+      commands:
+        - npm run build -- --eject
+        - npm ci --omit=dev
+        - npm run build:amplify
+  artifacts:
+    baseDirectory: .amplify-hosting
     files:
       - '**/*'
   cache:
