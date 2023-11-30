@@ -3,7 +3,7 @@
   "framework": { "name": "express", "version": "4.18.2" },
   "routes": [
     {
-      "path": "/static/*.*",
+      "path": "/*.*",
       "target": {
         "kind": "Static",
         "cacheControl": "public, max-age=2"
