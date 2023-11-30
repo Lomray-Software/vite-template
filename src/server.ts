@@ -12,6 +12,11 @@ import routes from '@routes/index';
 import App from './app';
 
 /**
+ * AWS Amplify SSR user agent
+ */
+isBot.clear('Amazon CloudFront');
+
+/**
  * Configure server
  */
 export default entryServer(App, routes, {
@@ -58,15 +63,7 @@ export default entryServer(App, routes, {
      * We can control stream mode here
      */
     onRouterReady: ({ context: { req } }) => {
-      // eslint-disable-next-line sonarjs/no-duplicate-string
       const isStream = !isBot(req.get('user-agent')) && req.cookies?.isCrawler !== '1';
-
-      console.info(
-        'Debug user agent:',
-        req.get('user-agent'),
-        isBot(req.get('user-agent')),
-        req.cookies?.isCrawler,
-      );
 
       return {
         isStream,
