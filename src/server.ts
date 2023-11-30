@@ -63,7 +63,15 @@ export default entryServer(App, routes, {
      * We can control stream mode here
      */
     onRouterReady: ({ context: { req } }) => {
+      // eslint-disable-next-line sonarjs/no-duplicate-string
       const isStream = !isBot(req.get('user-agent')) && req.cookies?.isCrawler !== '1';
+
+      console.log({
+        isStream,
+        isBot: isBot(req.get('user-agent')),
+        isCrawler: req.cookies?.isCrawler,
+        userAgent: req.get('user-agent'),
+      });
 
       return {
         isStream,
