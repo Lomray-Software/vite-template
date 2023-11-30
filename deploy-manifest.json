@@ -25,7 +25,7 @@
     {
       "name": "default",
       "runtime": "nodejs18.x",
-      "entrypoint": "./node_modules/.bin/ssr-boost start"
+      "entrypoint": "build/server/start.js"
     }
   ]
 }
