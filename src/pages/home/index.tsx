@@ -88,6 +88,9 @@ const Home: FCRoute = () => {
         <p>
           <Link to={RouteManager.makeURL('redirect')}>Redirect demo</Link>
         </p>
+        <p>
+          <Link to={RouteManager.makeURL('notLazy')}>Not lazy page demo</Link>
+        </p>
       </div>
       <p className={styles.navigateExplain}>Click on the links to learn more</p>
       <p className={styles.navigateExplain}>

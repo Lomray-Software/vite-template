@@ -24,7 +24,10 @@ const manager = new Manager({
       url: '/nested-suspense',
     },
     redirect: {
-      url: 'redirect-demo',
+      url: '/redirect-demo',
+    },
+    notLazy: {
+      url: '/not-lazy',
     },
   },
 });

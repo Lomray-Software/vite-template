@@ -1,6 +1,7 @@
 import type { TRouteObject } from '@lomray/vite-ssr-boost/interfaces/route-object';
 import AppLayout from '@components/layouts/app';
 import NotFound from '@pages/not-found';
+import NotLazyPage from '@pages/not-lazy';
 import RouteManager from '@services/route-manager';
 import DetailsRoutes from './details';
 
@@ -31,6 +32,14 @@ const routes: TRouteObject[] = [
       {
         path: RouteManager.path('redirect'),
         lazy: () => import('@pages/redirect'),
+      },
+      {
+        path: RouteManager.path('redirect'),
+        lazy: () => import('@pages/redirect'),
+      },
+      {
+        path: RouteManager.path('notLazy'),
+        Component: NotLazyPage,
       },
     ],
   },
