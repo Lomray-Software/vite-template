@@ -84,3 +84,8 @@ frontend:
     paths:
       - node_modules/**/*
 ```
+
+## Vercel build - SSR
+__Build Command__: `npm pkg delete scripts.prepare && npm run build -- --serverless && npm run build:vercel`  
+__Output Directory__: `.vercel/output`  
+__Install command__: `npm ci`
