@@ -1,9 +1,10 @@
 # Vite template
 
 ## Links
+[Testing SSR Docker](https://vite-template.lomray.com/)  
 [Testing SPA Amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)  
 [Testing SSR Amplify](https://prod.d947n8vxd7uac.amplifyapp.com/)  
-[Testing SSR Docker](https://vite-template.lomray.com/)
+[Testing SSR Vercel](https://vite-template-4nvv.vercel.app/)  
 
 ## Used libraries
  - [VITE SSR BOOST](https://github.com/Lomray-Software/vite-ssr-boost)
