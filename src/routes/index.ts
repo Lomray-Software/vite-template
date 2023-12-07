@@ -34,10 +34,6 @@ const routes: TRouteObject[] = [
         lazy: () => import('@pages/redirect'),
       },
       {
-        path: RouteManager.path('redirect'),
-        lazy: () => import('@pages/redirect'),
-      },
-      {
         path: RouteManager.path('notLazy'),
         Component: NotLazyPage,
       },
