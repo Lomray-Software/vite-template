@@ -6,7 +6,7 @@ on:
     types: [ synchronize ]
 
 env:
-  NODE_VERSION: 18.13.0
+  NODE_VERSION: 18.19.0
 
 jobs:
   check:
