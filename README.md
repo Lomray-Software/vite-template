@@ -1,10 +1,10 @@
 # Vite template
 
-## Links
-[Testing SSR Docker (Streaming supported)](https://vite-template.lomray.com/)  
-[Testing SPA Amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)  
-[Testing SSR Amplify (Streaming not supported)](https://prod.d947n8vxd7uac.amplifyapp.com/)  
-[Testing SSR Vercel (Streaming not supported)](https://vite-template-three.vercel.app/)  
+## Demo links
+[SSR Docker (Streaming supported)](https://vite-template.lomray.com/)  
+[SSR Amplify (Streaming not supported)](https://prod.d947n8vxd7uac.amplifyapp.com/)  
+[SSR Vercel (Streaming not supported)](https://vite-template-three.vercel.app/)  
+[SPA Amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)
 
 ## Used libraries
  - [VITE SSR BOOST](https://github.com/Lomray-Software/vite-ssr-boost)
@@ -39,6 +39,7 @@ __NOTE: see .github for understand CI/CD__
 ## Docker build
 [See github workflow](.github/workflows/release.yml) or
 ```bash
+npm run build
 ssr-boost build-docker --image-name test-image
 ```
 
@@ -86,7 +87,11 @@ frontend:
       - node_modules/**/*
 ```
 
-## Vercel build - SSR
-__Build Command__: `npm pkg delete scripts.prepare && npm run build -- --serverless && npm run build:vercel`  
-__Output Directory__: `.vercel/output`  
-__Install command__: `npm ci`
+## Vercel build (vercel.json) - SSR
+```json
+{
+  "buildCommand": "npm pkg delete scripts.prepare && npm run build -- --serverless && npm run build:vercel",
+  "installCommand": "npm ci",
+  "outputDirectory": ".vercel/output"
+}
+```
