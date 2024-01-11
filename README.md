@@ -36,6 +36,29 @@ __NOTE: see .github for understand CI/CD__
 2. Create Pull Request & test
 3. Squash & merge into `prod`
 
+## WARNING
+Right solution for wrap `<Outlet />` into `<Suspense />`. If you would like to wrap your lazy routes only once:
+```typescript jsx
+import { Outlet, useLocation } from 'react-router-dom';
+import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
+import { Suspense } from '@lomray/consistent-suspense';
+
+/**
+ * NOTE: without key it's doesn't work
+ * @see https://github.com/remix-run/react-router/issues/10568
+ * @constructor
+ */
+const MyLayout: FCRoute = () => {
+  const { key } = useLocation();
+
+  return (
+    <Suspense key={key}>
+      <Outlet/>
+    </Suspense>
+  )
+}
+```
+
 ## Docker build
 [See github workflow](.github/workflows/release.yml) or
 ```bash
