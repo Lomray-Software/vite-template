@@ -43,6 +43,7 @@ jobs:
         with:
           name: build-artifact
           path: ${{ github.workspace }}
+          overwrite: true
 
   docker-build:
     needs: [release, inject-version]
