@@ -16,11 +16,11 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -40,10 +40,5 @@ jobs:
       - name: Build check
         run: npm run build -- --throw-warnings
 
-      - uses: naveenk1223/action-pr-title@master
-        with:
-          # Regex the title should match.
-          regex: '^(feat|fix|perf|refactor|revert|test|test|build|chore)([(a-z-)]*):\s[a-z0-9\s,()]+$'
-          prefix_case_sensitive: true
-          min_length: 10
-          max_length: 80
+      - name: Commit lint PR title
+        run: echo "${{ github.event.pull_request.title }}" | npx --no-install commitlint -g commitlint.config.js
