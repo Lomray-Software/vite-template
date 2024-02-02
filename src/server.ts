@@ -5,17 +5,19 @@ import { Manager } from '@lomray/react-mobx-manager';
 import ManagerStream from '@lomray/react-mobx-manager/manager-stream';
 import entryServer from '@lomray/vite-ssr-boost/node/entry';
 import CookieParser from 'cookie-parser';
-import isBot from 'isbot';
+import { createIsbotFromList, list, isbotPatterns } from 'isbot';
 import { enableStaticRendering } from 'mobx-react-lite';
 import StateKey from '@constants/state-key';
 import routes from '@routes/index';
 import App from './app';
 
 /**
- * AWS Amplify SSR user agent
+ * Exclude AWS Amplify user agent
  */
-isBot.clear('Amazon CloudFront');
+const patternsToRemove = new Set(['Amazon CloudFront'].map(isbotPatterns).flat());
+const isBot = createIsbotFromList(list.filter((record) => !patternsToRemove.has(record)));
 
+// noinspection JSUnusedGlobalSymbols
 /**
  * Configure server
  */
@@ -63,7 +65,7 @@ export default entryServer(App, routes, {
      * We can control stream mode here
      */
     onRouterReady: ({ context: { req } }) => {
-      const isStream = !isBot(req.get('user-agent')) && req.cookies?.isCrawler !== '1';
+      const isStream = !isBot(req.get('user-agent') || '') && req.cookies?.isCrawler !== '1';
 
       return {
         isStream,
