@@ -39,7 +39,7 @@
   "devDependencies": {
     "@commitlint/cli": "^18.6.0",
     "@commitlint/config-conventional": "^18.6.0",
-    "@lomray/eslint-config": "^4.0.1",
+    "@lomray/eslint-config-react": "^4.1.1",
     "@lomray/prettier-config": "^2.0.1",
     "@lomray/stylelint-config": "^2.0.1",
     "@semantic-release/exec": "^6.0.3",

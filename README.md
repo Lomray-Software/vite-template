@@ -18,7 +18,7 @@
 ```bash
 git clone git@github.com:Lomray-Software/vite-template.git
 npm ci
-npm run dev
+npm run develop
 ```
 
 ## Structure

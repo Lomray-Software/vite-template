@@ -25,11 +25,14 @@ class ErrorBoundary extends Component<{ children: ReactNode }, IErrorBoundarySta
   }
 
   render(): ReactNode {
-    if (this.state.hasError) {
+    const { hasError } = this.state;
+    const { children } = this.props;
+
+    if (hasError) {
       return <h3>Something went wrong.</h3>;
     }
 
-    return this.props.children;
+    return children;
   }
 }
 

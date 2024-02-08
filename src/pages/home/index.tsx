@@ -73,7 +73,7 @@ const Home: FCRoute = () => {
         </a>
       </div>
       <div className={styles.card}>
-        <button onClick={toggleCrawler}>
+        <button type="button" onClick={toggleCrawler}>
           You are watching site like: <strong>{isCrawler ? 'Search bot' : 'Human'}</strong>
         </button>
         <p>

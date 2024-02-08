@@ -12,7 +12,9 @@ const ErrorBoundary = () => {
     <>
       <div>Boom! Error: {message}</div>
       <div className="mr20">
-        <button onClick={() => navigate(-1)}>Go back</button>
+        <button type="button" onClick={() => navigate(-1)}>
+          Go back
+        </button>
       </div>
     </>
   );

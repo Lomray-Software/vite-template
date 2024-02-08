@@ -3,7 +3,7 @@ module.exports = {
   extends: [
     'prettier',
     'plugin:prettier/recommended',
-    '@lomray/eslint-config'
+    '@lomray/eslint-config-react',
   ],
   ignorePatterns: ['/node_modules/*', '/build/*', '*.cjs', '*.js'],
   plugins: [],
