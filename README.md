@@ -1,10 +1,12 @@
 # Vite template
 
 ## Demo links
-[SSR Docker (Streaming supported)](https://vite-template.lomray.com/)  
-[SSR Amplify (Streaming not supported)](https://prod.d947n8vxd7uac.amplifyapp.com/)  
-[SSR Vercel (Streaming not supported)](https://vite-template-three.vercel.app/)  
-[SPA Amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)
+ - Streaming supported
+   - [SSR Docker (Streaming supported)](https://vite-template.lomray.com/)
+ - Streaming **NOT** supported
+   - [SSR Amplify (Streaming not supported)](https://prod.d947n8vxd7uac.amplifyapp.com/)  
+   - [SSR Vercel (Streaming not supported)](https://vite-template-three.vercel.app/)  
+   - [SPA Amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)
 
 ## Used libraries
  - [VITE SSR BOOST](https://github.com/Lomray-Software/vite-ssr-boost)
@@ -36,8 +38,8 @@ __NOTE: see .github for understand CI/CD__
 2. Create Pull Request & test
 3. Squash & merge into `prod`
 
-## WARNING
-Right solution for wrap `<Outlet />` into `<Suspense />`. If you would like to wrap your lazy routes only once:
+## Some cases to pay attention to.
+ - Right solution for wrap `<Outlet />` into `<Suspense />`. If you would like to wrap your lazy routes only once:
 ```typescript jsx
 import { Outlet, useLocation } from 'react-router-dom';
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
@@ -56,6 +58,34 @@ const MyLayout: FCRoute = () => {
       <Outlet/>
     </Suspense>
   )
+}
+```
+
+- In some cases nested Suspense should be memorized for preventing "This Suspense boundary received an update before it finished hydrating."
+```typescript jsx
+/**
+ * Parent component can receive update what will entail rerender.
+ * We should avoid rerenders for children suspense. 
+ * @constructor
+ */
+const Parent: FC = () => {
+  /**
+   * Memorize Suspense to avoid errors
+   */
+  const children = useMemo(
+    () => (
+      <Suspense fallback={<Fallback/>}>
+        <UserWrapper id={id} fields={restFields}/>
+      </Suspense>
+    ),
+    [],
+  );
+
+  return (
+    <div style={{ paddingLeft: '50px', textAlign: 'left' }}>
+      {children}
+    </div>
+  );
 }
 ```
 
