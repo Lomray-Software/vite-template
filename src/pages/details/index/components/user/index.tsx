@@ -30,7 +30,7 @@ const User: FC<Props> = ({ userId, mainStore: { user, suspense, getUser } }) => 
       )}
       <div>
         <span className={styles.col}>User from suspense:</span>{' '}
-        <Link to={RouteManager.makeURL('details.user', { id: user?.id ?? '' })}>
+        <Link to={RouteManager.makeURL('details.user', { id: user!.id })}>
           {user?.id} ({user?.name})
         </Link>
       </div>
