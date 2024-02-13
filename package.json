@@ -18,8 +18,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@lomray/consistent-suspense": "^2.0.1",
-    "@lomray/react-head-manager": "^2.0.1",
+    "@lomray/consistent-suspense": "^2.0.2",
+    "@lomray/react-head-manager": "^2.0.2",
     "@lomray/react-mobx-manager": "^3.0.1",
     "@lomray/react-route-manager": "^2.0.0",
     "@lomray/vite-ssr-boost": "^2.3.0",
