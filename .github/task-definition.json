@@ -1,16 +1,13 @@
 {
-  "ipcMode": null,
   "executionRoleArn": "arn:aws:iam::771350349623:role/ECSTaskDefinitionRole",
   "containerDefinitions": [
     {
-      "dnsSearchDomains": null,
-      "environmentFiles": null,
       "logConfiguration": {
         "logDriver": "none",
         "secretOptions": null,
         "options": null
       },
-      "entryPoint": [],
+      "environment": [],
       "portMappings": [
         {
           "hostPort": 0,
@@ -18,56 +15,24 @@
           "containerPort": 3000
         }
       ],
-      "command": [],
-      "linuxParameters": null,
       "cpu": 0,
-      "environment": [],
-      "resourceRequirements": null,
-      "ulimits": null,
       "repositoryCredentials": {
         "credentialsParameter": "arn:aws:secretsmanager:eu-west-1:771350349623:secret:ecs/docker-github-EvtP4B"
       },
-      "dnsServers": null,
       "mountPoints": [],
-      "workingDirectory": null,
-      "secrets": null,
-      "dockerSecurityOptions": null,
-      "memory": null,
-      "memoryReservation": null,
       "volumesFrom": [],
-      "stopTimeout": null,
       "image": "ghcr.io/lomray-software/vite-template/web:latest-prod",
-      "startTimeout": null,
-      "firelensConfiguration": null,
-      "dependsOn": null,
-      "disableNetworking": null,
-      "interactive": null,
-      "healthCheck": null,
-      "essential": true,
-      "links": null,
-      "hostname": null,
-      "extraHosts": null,
-      "pseudoTerminal": null,
-      "user": null,
-      "readonlyRootFilesystem": null,
-      "dockerLabels": null,
-      "systemControls": null,
-      "privileged": null,
-      "name": "web"
+      "name": "web",
+      "essential": true
     }
   ],
   "placementConstraints": [],
   "memory": "100",
   "taskRoleArn": "arn:aws:iam::771350349623:role/ECSTaskDefinitionRole",
   "family": "vite-template",
-  "pidMode": null,
   "requiresCompatibilities": [
     "EC2"
   ],
   "networkMode": "bridge",
-  "runtimePlatform": null,
-  "cpu": null,
-  "inferenceAccelerators": null,
-  "proxyConfiguration": null,
   "volumes": []
 }
