@@ -32,6 +32,6 @@
       "@routes/*": ["./routes/*"]
     }
   },
-  "include": ["src", "types", "vite.config.ts"],
+  "include": ["src", "types", "vite.config.ts", "eslint.config.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
