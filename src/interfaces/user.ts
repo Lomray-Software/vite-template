@@ -4,3 +4,11 @@ export interface IUser {
   email: string;
   avatar: string;
 }
+
+export interface IApiUser {
+  name: Record<string, string>;
+  email: string;
+  picture: {
+    medium: string;
+  };
+}

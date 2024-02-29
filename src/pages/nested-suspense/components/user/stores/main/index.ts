@@ -2,7 +2,7 @@ import SuspenseQuery from '@lomray/react-mobx-manager/suspense-query';
 import axios from 'axios';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { API_GATEWAY } from '@constants/index';
-import type { IUser } from '@interfaces/user';
+import type { IApiUser, IUser } from '@interfaces/user';
 
 /**
  * User detail store
@@ -33,7 +33,9 @@ class MainStore {
    * Get user
    */
   public getUser = async (id: string, field: keyof IUser): Promise<void> => {
-    const { data } = await axios.request({ url: `${API_GATEWAY}/?seed=${id}` });
+    const { data } = await axios.request<{ results: [IApiUser] }>({
+      url: `${API_GATEWAY}/?seed=${id}`,
+    });
 
     // add some delay
     await new Promise((resolve) => {
@@ -45,12 +47,12 @@ class MainStore {
     runInAction(() => {
       const user = {
         id,
-        name: Object.values(name as Record<string, string>).join(' '),
+        name: Object.values(name).join(' '),
         email,
         avatar: '',
       };
 
-      this.user = { [field]: user[field] } as IUser;
+      this.user = { [field]: user[field] } as unknown as IUser;
     });
   };
 }

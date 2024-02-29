@@ -38,7 +38,7 @@ const User: FC<TProps> = ({ id, fields, mainStore: { user, suspense, getUser } }
         <UserWrapper id={id} fields={restFields} />
       </Suspense>
     ),
-    [],
+    [id],
   );
 
   return (

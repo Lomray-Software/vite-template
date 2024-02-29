@@ -2,7 +2,7 @@ import SuspenseQuery from '@lomray/react-mobx-manager/suspense-query';
 import axios from 'axios';
 import { action, makeObservable, observable } from 'mobx';
 import { API_GATEWAY } from '@constants/index';
-import type { IUser } from '@interfaces/user';
+import type { IApiUser, IUser } from '@interfaces/user';
 
 /**
  * Details user component store
@@ -54,8 +54,14 @@ class MainStore {
   /**
    * Set error
    */
-  public setError(message: string | null): void {
-    this.error = message;
+  public setError(error: unknown): void {
+    if (error instanceof Error) {
+      this.error = error.message;
+
+      return;
+    }
+
+    this.error = typeof error === 'string' || error === null ? error : null;
   }
 
   /**
@@ -73,7 +79,9 @@ class MainStore {
     this.setError(null);
 
     try {
-      const { data } = await axios.request({ url: `${API_GATEWAY}/?seed=${id}` });
+      const { data } = await axios.request<{ results: [IApiUser] }>({
+        url: `${API_GATEWAY}/?seed=${id}`,
+      });
 
       // add some delay for demonstration
       const time = id === 'user-1' ? 1000 : id === 'user-3' ? 3000 : 2000;
@@ -86,12 +94,12 @@ class MainStore {
 
       this.setUser({
         id,
-        name: Object.values(name as Record<string, string>).join(' '),
+        name: Object.values(name).join(' '),
         email,
         avatar: picture.medium,
       });
-    } catch (e: any) {
-      this.setError(e?.message as string);
+    } catch (e) {
+      this.setError(e);
     }
 
     this.setIsLoading(false);

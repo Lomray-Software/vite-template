@@ -8,6 +8,7 @@ import CookieParser from 'cookie-parser';
 import { createIsbotFromList, list, isbotPatterns } from 'isbot';
 import { enableStaticRendering } from 'mobx-react-lite';
 import StateKey from '@constants/state-key';
+import type { ICookies } from '@interfaces/cookies.ts';
 import routes from '@routes/index';
 import App from './app';
 
@@ -65,7 +66,8 @@ export default entryServer(App, routes, {
      * We can control stream mode here
      */
     onRouterReady: ({ context: { req } }) => {
-      const isStream = !isBot(req.get('user-agent') || '') && req.cookies?.isCrawler !== '1';
+      const isStream =
+        !isBot(req.get('user-agent') || '') && (req.cookies as ICookies)?.isCrawler !== '1';
 
       return {
         isStream,
