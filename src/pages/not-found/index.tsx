@@ -44,6 +44,8 @@ const NotFound: FCRoute = () => {
     );
   }
 
+  console.error('Error boundary:', error);
+
   return (
     <>
       <div>Something went wrong.</div>
