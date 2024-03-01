@@ -103,7 +103,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - nvm use 18.13.0
+        - nvm use 18.19.0
         - npm ci
     build:
       commands:
@@ -124,7 +124,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - nvm use 18.13.0
+        - nvm use 18.19.0
         - npm pkg delete scripts.prepare
         - npm ci
     build:
