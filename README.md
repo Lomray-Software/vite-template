@@ -8,6 +8,10 @@
    - [SSR Vercel (Streaming not supported)](https://vite-template-three.vercel.app/)  
    - [SPA Amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)
 
+## Explore
+ - [prod](https://github.com/Lomray-Software/vite-template/tree/prod) current branch with Mobx + Store Manager, Head Manager (meta), Route Manager
+ - [feature/localization](https://github.com/Lomray-Software/vite-template/tree/feature/localization) branch with example of localization
+
 ## Used libraries
  - [VITE SSR BOOST](https://github.com/Lomray-Software/vite-ssr-boost)
  - [CONSISTENT SUSPENSE](https://github.com/Lomray-Software/consistent-suspense)
