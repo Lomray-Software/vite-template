@@ -2,7 +2,7 @@ import { Meta } from '@lomray/react-head-manager';
 import ResponseStatus from '@lomray/vite-ssr-boost/components/response-status';
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
-import RouteManager from '@services/route-manager.ts';
+import RouteManager from '@services/route-manager';
 
 interface INotExist {
   status: number;

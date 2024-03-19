@@ -8,7 +8,7 @@ import CookieParser from 'cookie-parser';
 import { createIsbotFromList, list, isbotPatterns } from 'isbot';
 import { enableStaticRendering } from 'mobx-react-lite';
 import StateKey from '@constants/state-key';
-import type { ICookies } from '@interfaces/cookies.ts';
+import type { ICookies } from '@interfaces/cookies';
 import routes from '@routes/index';
 import App from './app';
 

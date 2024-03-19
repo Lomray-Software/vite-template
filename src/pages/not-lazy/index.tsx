@@ -3,7 +3,7 @@ import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import { lazy } from 'react';
 import { Link } from 'react-router-dom';
 import Fallback from '@components/fallback';
-import RouteManager from '@services/route-manager.ts';
+import RouteManager from '@services/route-manager';
 import styles from './styles.module.scss';
 
 const CodeSplitting = lazy(() => import('@components/code-splitting'));

@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { IS_PROD } from '@constants/index.ts';
-import RouteManager from '@services/route-manager.ts';
+import { IS_PROD } from '@constants/index';
+import RouteManager from '@services/route-manager';
 
 interface IError {
   e?: Error;
