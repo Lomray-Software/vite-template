@@ -4,11 +4,30 @@ on:
   push:
     branches: [ prod ]
 
+env:
+  NODE_VERSION: 20.10.0
+
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.ref }}-prepare
+      cancel-in-progress: true
+    outputs:
+      node-version: ${{ steps.variable.outputs.node-version }}
+
+    steps:
+      - name: Define variables
+        id: variable
+        run: |
+          echo "node-version=$NODE_VERSION" >> $GITHUB_OUTPUT
+
   build:
+    needs: [prepare]
     uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-build.yml@prod
     with:
       app-build-args: --unlock-robots
+      node-version: ${{ needs.prepare.outputs.node-version }}
 
   release:
     needs: [build]
