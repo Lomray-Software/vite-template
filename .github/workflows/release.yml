@@ -30,14 +30,15 @@ jobs:
       node-version: ${{ needs.prepare.outputs.node-version }}
 
   release:
-    needs: [build]
+    needs: [build,prepare]
     uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-release.yml@prod
     with:
       has-release-asset: true
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
+      node-version: ${{ needs.prepare.outputs.node-version }}
 
-  # inject actual version to app (only demo)
+  # inject actual version to app
   inject-version:
     needs: [release]
     runs-on: ubuntu-latest
