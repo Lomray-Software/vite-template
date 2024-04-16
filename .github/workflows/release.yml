@@ -34,9 +34,9 @@ jobs:
     uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-release.yml@prod
     with:
       has-release-asset: true
+      node-version: ${{ needs.prepare.outputs.node-version }}
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
-      node-version: ${{ needs.prepare.outputs.node-version }}
 
   # inject actual version to app
   inject-version:
