@@ -23,18 +23,18 @@
     "@lomray/react-head-manager": "^2.1.0",
     "@lomray/react-mobx-manager": "^4.0.0",
     "@lomray/react-route-manager": "^2.0.0",
-    "@lomray/vite-ssr-boost": "^3.0.0",
+    "@lomray/vite-ssr-boost": "^3.1.0",
     "axios": "^1.7.7",
     "classnames": "^2.5.1",
     "cookie-parser": "^1.4.6",
     "isbot": "^5.1.17",
     "js-cookie": "^3.0.5",
-    "mobx": "^6.13.2",
+    "mobx": "^6.13.3",
     "mobx-react-lite": "^4.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-loading-skeleton": "^3.4.0",
-    "react-router-dom": "^6.23.1"
+    "react-loading-skeleton": "^3.5.0",
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
@@ -48,16 +48,16 @@
     "@types/node": "20.10.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^4.3.2",
     "eslint": "^8.57.0",
-    "husky": "^9.1.5",
+    "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "prettier": "^3.2.5",
     "sass": "^1.78.0",
-    "semantic-release": "^24.1.1",
+    "semantic-release": "^24.1.2",
     "stylelint": "^16.9.0",
     "typescript": "^5.3.3",
-    "vite": "^5.4.4",
+    "vite": "^5.4.8",
     "vite-bundle-visualizer": "^1.2.1"
   }
 }
