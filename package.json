@@ -5,11 +5,11 @@
   "scripts": {
     "develop": "ssr-boost dev",
     "build": "ssr-boost build",
-    "build:spa": "ssr-boost build --only-client",
+    "build:spa": "ssr-boost build --focus-only client",
     "build:amplify": "ssr-boost build-amplify --is-optimize",
     "build:vercel": "ssr-boost build-vercel --is-optimize",
     "start:ssr": "ssr-boost start",
-    "start:spa": "ssr-boost start --only-client",
+    "start:spa": "ssr-boost start --focus-only client",
     "preview": "ssr-boost preview",
     "lint:check": "eslint \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
     "lint:format": "eslint --fix \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
