@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { IS_PROD } from '@constants/index';
 import RouteManager from '@services/route-manager';
 

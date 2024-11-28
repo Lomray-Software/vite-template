@@ -1,7 +1,7 @@
 import { Suspense, useId } from '@lomray/consistent-suspense';
 import { Meta } from '@lomray/react-head-manager';
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
-import { Link, useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router';
 import RouteManager from '@services/route-manager';
 import UserPlaceholder from './components/placeholder';
 import User from './components/user';
@@ -11,7 +11,7 @@ interface ILoaderData {
 }
 
 const Details: FCRoute = () => {
-  const { userIds } = useLoaderData() as ILoaderData;
+  const { userIds } = useLoaderData<ILoaderData>();
   const id1 = useId();
   const id2 = useId();
 

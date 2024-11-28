@@ -1,7 +1,7 @@
 import { Suspense } from '@lomray/consistent-suspense';
 import { Meta } from '@lomray/react-head-manager';
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Fallback from '@components/fallback';
 import RouteManager from '@services/route-manager';
 import User from './components/user';

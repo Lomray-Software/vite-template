@@ -1,7 +1,7 @@
 import { Meta } from '@lomray/react-head-manager';
 import { withStores } from '@lomray/react-mobx-manager';
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import DefaultSuspense from '@components/default-suspense';
 import ErrorBoundary from '@components/error-boundary-route';
 import RouteManager from '@services/route-manager';

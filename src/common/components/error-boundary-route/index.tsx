@@ -1,4 +1,4 @@
-import { useNavigate, useRouteError } from 'react-router-dom';
+import { useNavigate, useRouteError } from 'react-router';
 
 /**
  * Error boundary
@@ -12,7 +12,12 @@ const ErrorBoundary = () => {
     <>
       <div>Boom! Error: {message}</div>
       <div className="mr20">
-        <button type="button" onClick={() => navigate(-1)}>
+        <button
+          type="button"
+          onClick={() => {
+            void navigate(-1);
+          }}
+        >
           Go back
         </button>
       </div>

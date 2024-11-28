@@ -1,7 +1,7 @@
 import { Meta } from '@lomray/react-head-manager';
 import { withStores } from '@lomray/react-mobx-manager';
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import RouteManager from '@services/route-manager';
 import type { StoreProps } from './index.stores';
 import stores from './index.stores';

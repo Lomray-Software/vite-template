@@ -4,7 +4,7 @@ import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
 import cn from 'classnames';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
-import { Link, useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router';
 import ReactLogoImg from '@assets/images/react.svg';
 import { APP_VERSION, IS_PROD } from '@constants/index';
 import RouteManager from '@services/route-manager';
@@ -19,7 +19,7 @@ interface ILoaderData {
  * @constructor
  */
 const Home: FCRoute = () => {
-  const { isDefaultCrawler } = useLoaderData() as ILoaderData;
+  const { isDefaultCrawler } = useLoaderData<ILoaderData>();
   const [isCrawler, setIsCrawler] = useState(isDefaultCrawler);
 
   // show only on deployed application

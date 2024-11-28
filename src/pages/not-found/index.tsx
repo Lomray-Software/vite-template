@@ -1,5 +1,5 @@
 import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
-import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { isRouteErrorResponse, useRouteError } from 'react-router';
 import { WINDOW_OBJ } from '@constants/index';
 import Error from './components/error';
 import NotExist from './components/not-exist';
