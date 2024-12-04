@@ -1,4 +1,5 @@
 import SuspenseQuery from '@lomray/react-mobx-manager/suspense-query';
+import { makeObservable } from 'mobx';
 
 /**
  * Error boundary page store
@@ -14,13 +15,16 @@ class MainStore {
    */
   constructor() {
     this.suspense = new SuspenseQuery(this);
+
+    makeObservable(this, {});
   }
 
   /**
    * Get user
    */
   public getUser = async (): Promise<void> => {
-    // add some delay
+    console.info('Emulate request...');
+
     await new Promise((resolve) => {
       setTimeout(resolve, 2000);
     });

@@ -19,7 +19,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@lomray/consistent-suspense": "^2.0.5",
+    "@lomray/consistent-suspense": "^2.0.6",
     "@lomray/react-head-manager": "^2.1.0",
     "@lomray/react-mobx-manager": "^4.0.1",
     "@lomray/react-route-manager": "^2.0.0",
