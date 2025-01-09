@@ -1,4 +1,5 @@
 import type { TRouteObject } from '@lomray/vite-ssr-boost/interfaces/route-object';
+import Fallback from '@components/fallback';
 import AppLayout from '@components/layouts/app';
 import NotFound from '@pages/not-found';
 import NotLazyPage from '@pages/not-lazy';
@@ -40,7 +41,7 @@ const routes: TRouteObject[] = [
       {
         path: RouteManager.path('onlyClientPage'),
         lazy: () => import('@pages/only-client-page'),
-        isOnlyClient: true,
+        onlyClient: Fallback,
       },
     ],
   },
