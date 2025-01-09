@@ -37,6 +37,11 @@ const routes: TRouteObject[] = [
         path: RouteManager.path('notLazy'),
         Component: NotLazyPage,
       },
+      {
+        path: RouteManager.path('onlyClientPage'),
+        lazy: () => import('@pages/only-client-page'),
+        isOnlyClient: true,
+      },
     ],
   },
 ];

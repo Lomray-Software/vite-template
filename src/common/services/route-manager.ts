@@ -26,6 +26,9 @@ const manager = new Manager({
     redirect: {
       url: '/redirect-demo',
     },
+    onlyClientPage: {
+      url: '/only-client-page',
+    },
     notLazy: {
       url: '/not-lazy',
     },

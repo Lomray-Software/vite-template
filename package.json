@@ -23,7 +23,7 @@
     "@lomray/react-head-manager": "^2.1.0",
     "@lomray/react-mobx-manager": "^4.0.1",
     "@lomray/react-route-manager": "^2.0.0",
-    "@lomray/vite-ssr-boost": "^4.0.0",
+    "@lomray/vite-ssr-boost": "^6.0.0",
     "axios": "^1.7.8",
     "classnames": "^2.5.1",
     "cookie-parser": "^1.4.7",
