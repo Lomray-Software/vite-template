@@ -1,5 +1,6 @@
 import MobxManager from '@lomray/react-mobx-manager/plugins/vite';
 import SsrBoost from '@lomray/vite-ssr-boost/plugin';
+import devtoolsJson from 'vite-plugin-devtools-json';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 
@@ -11,5 +12,5 @@ export default defineConfig({
   build: {
     outDir: '../build',
   },
-  plugins: [SsrBoost(), react(), MobxManager()],
+  plugins: [devtoolsJson(), SsrBoost(), react(), MobxManager()],
 });
