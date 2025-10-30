@@ -1,6 +1,6 @@
 {
   "name": "@lomray/vite-template",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "develop": "ssr-boost dev",
