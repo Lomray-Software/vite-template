@@ -5,36 +5,21 @@ on:
     branches: [ prod ]
 
 env:
-  NODE_VERSION: 20.10.0
+  NODE_VERSION: 22.21.0
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.ref }}-prepare
-      cancel-in-progress: true
-    outputs:
-      node-version: ${{ steps.variable.outputs.node-version }}
-
-    steps:
-      - name: Define variables
-        id: variable
-        run: |
-          echo "node-version=$NODE_VERSION" >> $GITHUB_OUTPUT
-
   build:
-    needs: [prepare]
     uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-build.yml@prod
     with:
       app-build-args: --unlock-robots
-      node-version: ${{ needs.prepare.outputs.node-version }}
+      node-version: ${{ env.NODE_VERSION }}
 
   release:
-    needs: [build,prepare]
+    needs: [build]
     uses: Lomray-Software/vite-ssr-boost/.github/workflows/ssr-boost-release.yml@prod
     with:
       has-release-asset: true
-      node-version: ${{ needs.prepare.outputs.node-version }}
+      node-version: ${{ env.NODE_VERSION }}
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
 
