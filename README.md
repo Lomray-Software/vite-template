@@ -5,7 +5,7 @@
    - [SSR Docker (Streaming supported)](https://vite-template.lomray.com/)
  - Streaming **NOT** supported
    - [SSR Amplify (Streaming not supported)](https://prod.d947n8vxd7uac.amplifyapp.com/)  
-   - [SSR Vercel (Streaming not supported)](https://vite-template-three.vercel.app/)  
+   - [SSR Vercel (Streaming supported)](https://vite-template-three.vercel.app/)  
    - [SPA Amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)
 
 ## Explore
