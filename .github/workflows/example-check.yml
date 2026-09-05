@@ -126,7 +126,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Build
-        run: npm run build -- --throw-warnings
+        run: npm run build -- --throw-warnings --unlock-robots
 
       - name: Run Lighthouse
         env:

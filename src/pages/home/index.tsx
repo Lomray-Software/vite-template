@@ -52,14 +52,22 @@ const Home: FCRoute = () => {
       </div>
       <div className={styles.logos}>
         <a href="https://vitejs.dev/" target="_blank" rel="nofollow">
-          <img src="/vite.svg" className={styles.logo} alt="Vite logo" />
+          <img src="/vite.svg" width={256} height={257} className={styles.logo} alt="Vite logo" />
         </a>
         <a href="https://react.dev" target="_blank" rel="nofollow">
-          <img src={ReactLogoImg} className={styles.logo} alt="React logo" />
+          <img
+            src={ReactLogoImg}
+            width={256}
+            height={228}
+            className={styles.logo}
+            alt="React logo"
+          />
         </a>
         <a href="https://github.com/Lomray-Software/vite-ssr-boost" target="_blank">
           <img
             src="https://raw.githubusercontent.com/Lomray-Software/vite-ssr-boost/prod/logo.png"
+            width={150}
+            height={150}
             className={cn(styles.logo, styles.logoBoost)}
             alt="SSR Boost logo"
           />
@@ -67,6 +75,8 @@ const Home: FCRoute = () => {
         <a href="https://github.com/Lomray-Software/react-mobx-manager" target="_blank">
           <img
             src="https://raw.githubusercontent.com/Lomray-Software/react-mobx-manager/prod/logo.png"
+            width={150}
+            height={150}
             className={cn(styles.logo, styles.logoBoost)}
             alt="Mobx Store Manager logo"
           />
