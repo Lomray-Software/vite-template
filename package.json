@@ -11,6 +11,7 @@
     "start:ssr": "ssr-boost start",
     "start:spa": "ssr-boost start --focus-only client",
     "preview": "ssr-boost preview",
+    "smoke": "node scripts/smoke.mjs",
     "lint:check": "eslint \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
     "lint:format": "eslint --fix \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
     "style:check": "stylelint \"src/**/*.{css,scss}\"",
