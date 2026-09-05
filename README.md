@@ -5,7 +5,7 @@
 | Branch | What it shows | When to start from it | Link |
 | --- | --- | --- | --- |
 | `prod` | Streaming SSR, MobX, consistent Suspense, meta tags and route management | Use the full reference app | [Browse](https://github.com/Lomray-Software/vite-template/tree/prod) |
-| `example/minimal` (planned) | Minimal SSR with loaders and route-level CSS | Start with a small SSR app once available | Planned |
+| `example/minimal` | Six runtime dependencies, loaders, a lazy route with CSS, redirect, client-only route and 404, plus the SPA-to-SSR file diff | Start with a small SSR app | [Browse](https://github.com/Lomray-Software/vite-template/tree/example/minimal) |
 | `example/custom-server` (planned) | A custom Fastify server | Own the production server once available | Planned |
 | `example/localization` (planned) | Localization with server and client language state | Add localization once available | Planned |
 
