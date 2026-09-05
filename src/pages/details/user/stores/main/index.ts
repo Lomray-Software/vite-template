@@ -26,16 +26,16 @@ class MainStore {
 
     makeObservable(this, {
       user: observable,
-      setUser: action.bound,
+      setUser: action,
     });
   }
 
   /**
    * Set users
    */
-  public setUser(user: IUser): void {
+  public setUser = (user: IUser): void => {
     this.user = user;
-  }
+  };
 
   /**
    * Get user
