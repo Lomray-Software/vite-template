@@ -33,5 +33,6 @@
     }
   ],
   "streamPath": "/about",
-  "crawlerCookie": "isCrawler=1"
+  "crawlerCookie": "isCrawler=1",
+  "servers": ["ssr-boost", "fastify"]
 }

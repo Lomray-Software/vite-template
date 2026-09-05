@@ -31,9 +31,9 @@ const getPort = async () => {
   return port;
 };
 
-const startProcess = (command, args) => {
+const startProcess = (command, args, env = process.env) => {
   assert.ok(!interrupted, 'Smoke check interrupted.');
-  const child = spawn(command, args, { cwd: root, stdio: 'inherit', detached: true });
+  const child = spawn(command, args, { cwd: root, stdio: 'inherit', detached: true, env });
   const processState = { child, result: null, done: null, stopping: null };
 
   processState.done = new Promise((resolve) => {
@@ -153,10 +153,13 @@ const waitUntilReady = async (origin, state) => {
   throw new Error(`Server did not become ready within 30 seconds: ${origin}`);
 };
 
-const withServer = async (mode, args, verify) => {
+const withServer = async (mode, args, verify, server = 'ssr-boost') => {
   const port = await getPort();
   const origin = `http://127.0.0.1:${port}`;
-  const state = startProcess(process.execPath, [cli, 'start', ...args, '--port', String(port)]);
+  const state =
+    server === 'fastify'
+      ? startProcess(process.execPath, ['server/index.mjs'], { ...process.env, PORT: String(port) })
+      : startProcess(process.execPath, [cli, 'start', ...args, '--port', String(port)]);
 
   console.info(`[smoke] Starting ${mode} server on port ${port} (PID ${state.child.pid}).`);
 
@@ -173,7 +176,7 @@ try {
   const config = JSON.parse(
     await readFile(new URL('./smoke.config.json', import.meta.url), 'utf8'),
   );
-  const { routes, streamPath, crawlerCookie } = config;
+  const { routes, streamPath, crawlerCookie, servers = ['ssr-boost'] } = config;
 
   assert.ok(Array.isArray(routes) && routes.length > 0, 'Configure at least one smoke route.');
   assert.ok(typeof streamPath === 'string' && streamPath.startsWith('/'), 'Configure streamPath.');
@@ -182,47 +185,65 @@ try {
     'Configure crawlerCookie.',
   );
 
+  assert.ok(
+    Array.isArray(servers) &&
+      servers.length > 0 &&
+      servers.every((server) => ['ssr-boost', 'fastify'].includes(server)),
+    'Configure servers as a nonempty array containing ssr-boost or fastify.',
+  );
+
   await build();
-  await withServer('SSR', [], async (origin) => {
-    for (const { path, status, contains = [], headers = {} } of routes) {
-      const response = await inspect(origin, path, { headers });
+  for (const server of servers) {
+    const mode = `SSR (${server})`;
 
-      assert.equal(response.status, status, `SSR GET ${path}: expected status ${status}.`);
-      for (const marker of contains) {
+    await withServer(
+      mode,
+      [],
+      async (origin) => {
+        for (const { path, status, contains = [], headers = {} } of routes) {
+          const response = await inspect(origin, path, { headers });
+
+          assert.equal(response.status, status, `${mode} GET ${path}: expected status ${status}.`);
+          for (const marker of contains) {
+            assert.ok(
+              response.html.includes(marker),
+              `${mode} GET ${path}: missing ${JSON.stringify(marker)}.`,
+            );
+          }
+
+          console.info(
+            `[smoke] ${mode} GET ${path}: ${status}; ${contains.length} content checks passed.`,
+          );
+        }
+
+        const first = routes[0];
+        const head = await inspect(origin, first.path, { method: 'HEAD', headers: first.headers });
+
+        assert.equal(head.status, first.status, `${mode} HEAD ${first.path}: unexpected status.`);
+        assert.equal(head.html, '', `${mode} HEAD ${first.path}: expected an empty body.`);
+        console.info(`[smoke] ${mode} HEAD ${first.path}: ${head.status}; empty body.`);
+
+        const streamed = await inspect(origin, streamPath);
+
+        assert.equal(streamed.status, 200, `${mode} stream ${streamPath}: expected status 200.`);
         assert.ok(
-          response.html.includes(marker),
-          `SSR GET ${path}: missing ${JSON.stringify(marker)}.`,
+          streamed.chunks > 1,
+          `${mode} stream ${streamPath}: expected more than one HTML chunk, got ${streamed.chunks}.`,
         );
-      }
+        console.info(`[smoke] ${mode} stream ${streamPath}: ${streamed.chunks} HTML chunks.`);
 
-      console.info(`[smoke] SSR GET ${path}: ${status}; ${contains.length} content checks passed.`);
-    }
+        const crawler = await inspect(origin, streamPath, { headers: { Cookie: crawlerCookie } });
 
-    const first = routes[0];
-    const head = await inspect(origin, first.path, { method: 'HEAD', headers: first.headers });
-
-    assert.equal(head.status, first.status, `SSR HEAD ${first.path}: unexpected status.`);
-    assert.equal(head.html, '', `SSR HEAD ${first.path}: expected an empty body.`);
-    console.info(`[smoke] SSR HEAD ${first.path}: ${head.status}; empty body.`);
-
-    const streamed = await inspect(origin, streamPath);
-
-    assert.equal(streamed.status, 200, `SSR stream ${streamPath}: expected status 200.`);
-    assert.ok(
-      streamed.chunks > 1,
-      `SSR stream ${streamPath}: expected more than one HTML chunk, got ${streamed.chunks}.`,
+        assert.equal(crawler.status, 200, `${mode} crawler ${streamPath}: expected status 200.`);
+        assert.ok(
+          !crawler.html.includes('<!--$?-->'),
+          `${mode} crawler ${streamPath}: pending Suspense boundary.`,
+        );
+        console.info(`[smoke] ${mode} crawler ${streamPath}: 200; no pending Suspense boundaries.`);
+      },
+      server,
     );
-    console.info(`[smoke] SSR stream ${streamPath}: ${streamed.chunks} HTML chunks.`);
-
-    const crawler = await inspect(origin, streamPath, { headers: { Cookie: crawlerCookie } });
-
-    assert.equal(crawler.status, 200, `SSR crawler ${streamPath}: expected status 200.`);
-    assert.ok(
-      !crawler.html.includes('<!--$?-->'),
-      `SSR crawler ${streamPath}: pending Suspense boundary.`,
-    );
-    console.info(`[smoke] SSR crawler ${streamPath}: 200; no pending Suspense boundaries.`);
-  });
+  }
 
   await build(['--focus-only', 'client']);
   await withServer('SPA', ['--focus-only', 'client'], async (origin) => {
