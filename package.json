@@ -22,9 +22,9 @@
   "dependencies": {
     "@lomray/consistent-suspense": "^2.0.9",
     "@lomray/react-head-manager": "^2.1.2",
-    "@lomray/react-mobx-manager": "^4.5.0",
+    "@lomray/react-mobx-manager": "^4.5.1",
     "@lomray/react-route-manager": "^2.0.0",
-    "@lomray/vite-ssr-boost": "^8.0.0-beta.6",
+    "@lomray/vite-ssr-boost": "^8.0.0",
     "axios": "^1.20.0",
     "classnames": "^2.5.1",
     "cookie-parser": "^1.4.7",
