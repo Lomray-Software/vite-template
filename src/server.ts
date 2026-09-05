@@ -3,7 +3,7 @@ import { Manager as MetaManager } from '@lomray/react-head-manager';
 import MetaServer from '@lomray/react-head-manager/server';
 import { Manager } from '@lomray/react-mobx-manager';
 import ManagerStream from '@lomray/react-mobx-manager/manager-stream';
-import entryServer from '@lomray/vite-ssr-boost/node/entry';
+import entryServer from '@lomray/vite-ssr-boost/adapters/express/entry';
 import CookieParser from 'cookie-parser';
 import { createIsbotFromList, list, isbotPatterns } from 'isbot';
 import { enableStaticRendering } from 'mobx-react-lite';
