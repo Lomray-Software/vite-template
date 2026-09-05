@@ -6,7 +6,7 @@ on:
     types: [ synchronize ]
 
 env:
-  NODE_VERSION: 22.21.0
+  NODE_VERSION: 22.23.2
   ENABLE_CACHE: yes
 
 jobs:
