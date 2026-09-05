@@ -21,6 +21,10 @@
     {
       "matchUpdateTypes": ["major"],
       "groupName": null
+    },
+    {
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<23"
     }
   ]
 }

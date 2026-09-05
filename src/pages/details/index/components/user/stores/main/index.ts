@@ -38,23 +38,23 @@ class MainStore {
       user: observable,
       error: observable,
       isLoading: observable,
-      setUser: action.bound,
-      setError: action.bound,
-      setIsLoading: action.bound,
+      setUser: action,
+      setError: action,
+      setIsLoading: action,
     });
   }
 
   /**
    * Set users
    */
-  public setUser(user: IUser): void {
+  public setUser = (user: IUser): void => {
     this.user = user;
-  }
+  };
 
   /**
    * Set error
    */
-  public setError(error: unknown): void {
+  public setError = (error: unknown): void => {
     if (error instanceof Error) {
       this.error = error.message;
 
@@ -62,14 +62,14 @@ class MainStore {
     }
 
     this.error = typeof error === 'string' || error === null ? error : null;
-  }
+  };
 
   /**
    * Set loading state
    */
-  public setIsLoading(state: boolean): void {
+  public setIsLoading = (state: boolean): void => {
     this.isLoading = state;
-  }
+  };
 
   /**
    * Get user
