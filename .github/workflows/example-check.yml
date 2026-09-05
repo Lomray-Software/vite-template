@@ -1,0 +1,86 @@
+name: Check example branches
+
+on:
+  push:
+    branches: [ 'example/**' ]
+  schedule:
+    - cron: '17 6 * * 1'
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 22.23.2
+  ENABLE_CACHE: yes
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: ${{ github.event_name == 'schedule' && fromJSON('["prod", "example/minimal", "example/custom-server", "example/localization"]') || fromJSON(format('["{0}"]', github.ref_name)) }}
+    concurrency:
+      group: ${{ matrix.branch }}-check-example
+      cancel-in-progress: true
+
+    steps:
+      # Establish origin and checkout credentials before probing the target branch.
+      - uses: actions/checkout@v4
+
+      - name: Check branch exists
+        id: branch
+        env:
+          BRANCH: ${{ matrix.branch }}
+        run: |
+          if git ls-remote --exit-code --heads origin "$BRANCH"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            status=$?
+            if [ "$status" -ne 2 ]; then
+              echo "Unable to check branch $BRANCH (git exit $status)." >&2
+              exit "$status"
+            fi
+            echo "Branch $BRANCH does not exist yet; skipping."
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.branch.outputs.exists == 'true'
+        with:
+          ref: ${{ matrix.branch }}
+
+      - uses: actions/setup-node@v4
+        if: steps.branch.outputs.exists == 'true'
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: ${{ env.ENABLE_CACHE == 'yes' && 'npm' || '' }}
+
+      - name: Install dependencies
+        if: steps.branch.outputs.exists == 'true'
+        run: npm ci --ignore-scripts
+
+      - name: Commit lint latest title
+        if: steps.branch.outputs.exists == 'true'
+        run: git log -1 --format=%s | npx --no-install commitlint -g commitlint.config.js
+
+      - name: Check eslint
+        if: steps.branch.outputs.exists == 'true'
+        run: npm run lint:check
+
+      - name: Typescript check
+        if: steps.branch.outputs.exists == 'true'
+        run: npm run ts:check
+
+      - name: Stylelint check
+        if: steps.branch.outputs.exists == 'true'
+        run: npm run style:check
+
+      - name: Build check
+        if: steps.branch.outputs.exists == 'true'
+        run: npm run build -- --throw-warnings
+
+      - name: Smoke check
+        if: steps.branch.outputs.exists == 'true'
+        run: npm run smoke

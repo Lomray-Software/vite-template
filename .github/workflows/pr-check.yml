@@ -2,8 +2,8 @@ name: Check PR
 
 on:
   pull_request:
-    branches: [ prod ]
-    types: [ synchronize ]
+    branches: [ prod, 'example/**' ]
+    types: [ opened, synchronize, reopened ]
 
 env:
   NODE_VERSION: 22.23.2
@@ -41,3 +41,6 @@ jobs:
 
       - name: Build check
         run: npm run build -- --throw-warnings
+
+      - name: Smoke check
+        run: npm run smoke

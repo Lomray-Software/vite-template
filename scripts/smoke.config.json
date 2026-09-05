@@ -1,0 +1,14 @@
+{
+  "routes": [
+    { "path": "/", "status": 200, "contains": ["window.__staticRouterHydrationData"] },
+    { "path": "/not-lazy", "status": 200, "contains": ["Styled text"] },
+    { "path": "/redirect-demo", "status": 301 },
+    { "path": "/missing", "status": 404 },
+    { "path": "/details", "status": 200 },
+    { "path": "/nested-suspense", "status": 200 },
+    { "path": "/error-boundary", "status": 200 },
+    { "path": "/only-client-page", "status": 200 }
+  ],
+  "streamPath": "/details",
+  "crawlerCookie": "isCrawler=1"
+}
