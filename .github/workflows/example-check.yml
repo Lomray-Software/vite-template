@@ -1,6 +1,7 @@
 name: Check example branches
 
 on:
+  workflow_dispatch:
   push:
     branches: [ 'example/**' ]
   schedule:
@@ -81,6 +82,88 @@ jobs:
         if: steps.branch.outputs.exists == 'true'
         run: npm run build -- --throw-warnings
 
+      - name: Client size budget
+        if: steps.branch.outputs.exists == 'true'
+        run: npm run size:check
+
       - name: Smoke check
         if: steps.branch.outputs.exists == 'true'
         run: npm run smoke
+
+  lighthouse:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - branch: prod
+            artifact: prod
+            urls: ['http://127.0.0.1:4173/', 'http://127.0.0.1:4173/details']
+          - branch: example/minimal
+            artifact: minimal
+            urls: ['http://127.0.0.1:4173/', 'http://127.0.0.1:4173/about']
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      # Keep the workflow's Lighthouse tools available when checking out an example.
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.branch }}
+          path: app
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: ${{ env.ENABLE_CACHE == 'yes' && 'npm' || '' }}
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build
+        run: npm run build -- --throw-warnings
+
+      - name: Run Lighthouse
+        env:
+          LIGHTHOUSE_URLS: ${{ toJSON(matrix.urls) }}
+        run: |
+          set -m
+          npm run start:ssr -- --port 4173 > "$RUNNER_TEMP/lighthouse-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill -- -"$server_pid" 2>/dev/null || true; wait "$server_pid" 2>/dev/null || true' EXIT
+          ready=false
+          for attempt in {1..60}; do
+            if ! kill -0 "$server_pid" 2>/dev/null; then
+              cat "$RUNNER_TEMP/lighthouse-server.log"
+              exit 1
+            fi
+            if [ "$(curl --silent --output /dev/null --write-out '%{http_code}' --max-time 2 http://127.0.0.1:4173/ || true)" = 200 ]; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" != true ]; then
+            cat "$RUNNER_TEMP/lighthouse-server.log"
+            echo 'Production server did not return HTTP 200.' >&2
+            exit 1
+          fi
+          npx --yes @lhci/cli@0.15.1 autorun --config=../lighthouserc.cjs --upload.target=temporary-public-storage
+
+      - name: Summarize Lighthouse scores
+        if: always()
+        run: node ../scripts/lighthouse-summary.mjs
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-${{ matrix.artifact }}
+          path: app/.lighthouseci
+          include-hidden-files: true
+          if-no-files-found: warn

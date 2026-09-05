@@ -58,6 +58,16 @@ __NOTE: see .github for understand CI/CD__
 2. Create Pull Request & test
 3. Squash & merge into `prod`
 
+Dependabot checks dependencies every Monday morning and opens grouped update PRs for `prod` and the three example branches.
+
+PR and example checks run `npm run size:check` after building; the script lists client JavaScript gzip sizes and enforces the budget in `scripts/size-budget.mjs` (1 KB = 1024 bytes).
+After an intentional bundle change, rebuild and set that branch's budget to the measured gzip total plus 5%, rounded up to a whole KB.
+
+The example workflow also runs Lighthouse weekly and on manual dispatch for `/` and `/details` on `prod`, and `/` and `/about` on `example/minimal`.
+It measures each URL three times, requires performance of at least 90, warns below 90 for accessibility, best practices and SEO, and publishes reports and median category scores in the workflow artifacts and summary.
+To run the prod checks locally, build the app, run `npm run start:ssr -- --port 4173`, then in another terminal run `npx --yes @lhci/cli@0.15.1 autorun --upload.target=temporary-public-storage` and `node scripts/lighthouse-summary.mjs`.
+Lighthouse reports are uploaded to temporary public storage.
+
 ## Some cases to pay attention to.
  - Right solution for wrap `<Outlet />` into `<Suspense />`. If you would like to wrap your lazy routes only once:
 ```typescript jsx

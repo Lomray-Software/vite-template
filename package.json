@@ -17,14 +17,15 @@
     "style:check": "stylelint \"src/**/*.{css,scss}\"",
     "style:format": "stylelint --fix \"src/**/*.{css,scss}\"",
     "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "size:check": "node scripts/size-budget.mjs"
   },
   "dependencies": {
     "@lomray/consistent-suspense": "^2.0.9",
     "@lomray/react-head-manager": "^2.1.2",
     "@lomray/react-mobx-manager": "^4.5.1",
     "@lomray/react-route-manager": "^2.0.0",
-    "@lomray/vite-ssr-boost": "^8.0.0",
+    "@lomray/vite-ssr-boost": "^8.1.0",
     "axios": "^1.20.0",
     "classnames": "^2.5.1",
     "cookie-parser": "^1.4.7",
@@ -53,7 +54,7 @@
     "eslint": "^10.10.0",
     "globals": "^17.12.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.4.1",
+    "lint-staged": "^17.5.0",
     "prettier": "^3.9.6",
     "sass": "^1.104.0",
     "semantic-release": "^25.0.9",
