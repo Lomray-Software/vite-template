@@ -1,0 +1,39 @@
+{
+  "checkIt": "Versión española.",
+  "home": {
+    "heading": "Ejemplo mínimo de SSR",
+    "description": "Una aplicación React mínima con renderizado en el servidor y cargadores de rutas.",
+    "intro": "Rutas de React, HTML generado en el servidor y la misma aplicación en tu navegador.",
+    "users": "Cargar usuarios antes de renderizar",
+    "profile": "Abrir un perfil de usuario",
+    "loaderError": "Probar un cargador que devuelve 404",
+    "about": "Cargar una página con su propia hoja de estilos",
+    "redirect": "Seguir una redirección del servidor",
+    "clientOnly": "Abrir una página solo para el navegador",
+    "missing": "Probar una ruta desconocida"
+  },
+  "users": {
+    "heading": "Usuarios",
+    "description": "Usuarios cargados antes de que el servidor envíe la página.",
+    "intro": "El cargador espera 300 ms y devuelve esta lista como datos resueltos."
+  },
+  "about": {
+    "heading": "Acerca de este ejemplo",
+    "description": "Una ruta de carga diferida con su propio módulo CSS, incluido en el HTML del servidor.",
+    "intro": "Esta página es una ruta de carga diferida. Su hoja de estilos está incluida en el documento generado por el servidor."
+  },
+  "notFound": {
+    "heading": "Página no encontrada",
+    "description": "La página solicitada no existe.",
+    "home": "Volver al inicio"
+  },
+  "layout": {
+    "navigation": "Navegación principal",
+    "home": "Inicio",
+    "users": "Usuarios",
+    "about": "Acerca de",
+    "clientOnly": "Solo navegador",
+    "loading": "Cargando página…",
+    "language": "Idioma"
+  }
+}

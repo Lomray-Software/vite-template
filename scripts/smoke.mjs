@@ -185,17 +185,22 @@ try {
   await build();
   await withServer('SSR', [], async (origin) => {
     for (const { path, status, contains = [], headers = {} } of routes) {
+      assert.ok(
+        headers && typeof headers === 'object' && !Array.isArray(headers),
+        `SSR GET ${path}: headers must be an object.`,
+      );
+      const label = `SSR GET ${path}${Object.keys(headers).length ? ` ${JSON.stringify(headers)}` : ''}`;
       const response = await inspect(origin, path, { headers });
 
-      assert.equal(response.status, status, `SSR GET ${path}: expected status ${status}.`);
+      assert.equal(response.status, status, `${label}: expected status ${status}.`);
       for (const marker of contains) {
         assert.ok(
           response.html.includes(marker),
-          `SSR GET ${path}: missing ${JSON.stringify(marker)}.`,
+          `${label}: missing ${JSON.stringify(marker)}.`,
         );
       }
 
-      console.info(`[smoke] SSR GET ${path}: ${status}; ${contains.length} content checks passed.`);
+      console.info(`[smoke] ${label}: ${status}; ${contains.length} content checks passed.`);
     }
 
     const first = routes[0];
