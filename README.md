@@ -2,7 +2,7 @@
 
 This is the `example/custom-server` branch of vite-template.
 It extends [example/minimal](https://github.com/Lomray-Software/vite-template/tree/example/minimal) with a production server owned by the application.
-It uses React 19, React Router 8 [Data mode](https://reactrouter.com/start/modes#data), Vite 8, and vite-ssr-boost 8.0.0.
+It uses React 19, React Router 8 [Data mode](https://reactrouter.com/start/modes#data), Vite 8, and vite-ssr-boost 8.1.0.
 
 - A named Fetch handler and a default managed CLI entry share the same app, routes, and metadata hooks.
 - Development uses the managed CLI and its Vite integration.
@@ -19,7 +19,7 @@ Loaders return resolved first-paint data. Nested loader promises serialize as `{
 Use Node 22.23.2 (`.nvmrc`) and run `npm ci` from the repository root.
 [package.json](package.json) has eight direct runtime dependencies: the six from the minimal example plus `fastify` and `@fastify/static`.
 Fastify runs the HTTP server; its static plugin serves the browser build.
-The library range is `^8.0.0`.
+The library range is `^8.1.0`.
 
 These commands use the scripts in [package.json](package.json):
 
@@ -126,22 +126,14 @@ The managed CLI owns Vite transforms, development assets, and HMR ([server lifec
 The custom launcher runs only after a build and has no build step of its own.
 It imports the named handler from `build/server/server.js`.
 
-Production reads `build/client/index.html` once and splits it on `<!--ssr-outlet-->`.
-Each request gets a fresh HTML shell so route assets and metadata do not accumulate across requests.
-The `prepare` hook injects matched route assets through the library manifest service and forwards any Early Hints.
+`loadHtmlShell` reads the built `index.html` once and supplies a fresh shell per request; `createRouteAssetPreparer` injects the matched route assets from the build manifest and forwards Early Hints.
 
 Source: [server/index.mjs](server/index.mjs), production hook setup.
 
 ```js
 configureHandler({
-  getHtml: () => ({ header, footer }),
-  prepare: async ({ context, executionContext }) => {
-    const hints = manifest.injectAssets(context);
-
-    if (hints.has('Link')) {
-      await executionContext?.onEarlyHints?.(hints);
-    }
-  },
+  getHtml: await loadHtmlShell({ indexFile: join(clientDir, 'index.html') }),
+  prepare: createRouteAssetPreparer({ buildDir }),
 });
 ```
 
@@ -171,16 +163,11 @@ Fastify starts as `node server/index.mjs` with `PORT` set to a free port.
 The script then builds SPA and checks it with the managed server.
 Omitting `servers` preserves the managed SSR and SPA behavior used by other branches.
 
-## Known limitations
+## Production helpers
 
-The spike uses `@lomray/vite-ssr-boost@8.0.0`. No library files were changed.
+The launcher uses `loadHtmlShell` and `createRouteAssetPreparer` from `@lomray/vite-ssr-boost/node/production` for the HTML shell, matched route assets, and Early Hints. See the [Node production helpers API](https://lomray-software.github.io/vite-ssr-boost/api/node-production).
 
-- Route assets require the deep imports `@lomray/vite-ssr-boost/services/server-config` and `@lomray/vite-ssr-boost/services/ssr-manifest`. `ServerConfig.init({ isProd: true, isOnlyClient: false })` and `SsrManifest.get(config).injectAssets(context)` work from plain `server/index.mjs`. Injection adds the lazy `/about` stylesheet and returns `Link` headers, forwarded through `executionContext.onEarlyHints`. No manual manifest parsing or tag generation was needed.
-- These services couple the launcher to managed-server configuration. Build discovery uses the working directory, so start this example from the repository root. `SsrManifest.get` is a process-wide singleton that retains the first configuration; this example serves one build per process. Proposed public helper: `createRouteAssetPreparer<TAppProps>(options: { buildDir: string; modulePreload?: boolean }): NonNullable<ICreateHandlerOptions<TAppProps>['prepare']>`, exported from `@lomray/vite-ssr-boost/node/production`. It would load an independent manifest for the explicit build directory, inject matched route assets, and forward Early Hints without importing `services/*`.
-- HTML bootstrap is manual. The launcher reads `build/client/index.html` once, validates exactly one `<!--ssr-outlet-->`, and supplies a fresh `{ header, footer }` object for every request. The example's `configureHandler` installs `getHtml` and `prepare` before listening; it is application glue, not a library API. Proposed public helper: `loadHtmlShell(options: { indexFile: string; outlet?: string }): Promise<() => IHtmlShell>`, also exported from `@lomray/vite-ssr-boost/node/production`. It would perform that read, validation, split, and per-request copy.
-- Fastify owns static-file caching, listening, and shutdown. Its adapter owns streamed response compression. Development and HMR still use the managed CLI. Rebuild and restart production after changing the app or its assets.
-
-The proposed signatures describe missing public helpers. They are not implemented or importable in 8.0.0.
+Fastify owns static-file caching, listening, and shutdown. Its adapter owns streamed response compression. Development and HMR still use the managed CLI. Rebuild and restart production after changing the app or its assets.
 
 ## Need more?
 
