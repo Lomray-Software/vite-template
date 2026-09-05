@@ -8,6 +8,7 @@
   height: 6em;
   padding: 1.5em;
   transition: filter 300ms;
+  width: auto;
   will-change: filter;
 
   &:hover {
@@ -25,5 +26,11 @@
 }
 
 .navigateExplain {
-  color: #888;
+  color: #8c8c8c;
+}
+
+@media (prefers-color-scheme: light) {
+  .navigateExplain {
+    color: #727272;
+  }
 }

@@ -64,6 +64,7 @@ PR and example checks run `npm run size:check` after building; the script lists 
 After an intentional bundle change, rebuild and set that branch's budget to the measured gzip total plus 5%, rounded up to a whole KB.
 
 The example workflow also runs Lighthouse weekly and on manual dispatch for `/` and `/details` on `prod`, and `/` and `/about` on `example/minimal`.
+The audit build unlocks robots with `--unlock-robots`, matching the production deploy.
 It measures each URL three times, requires performance of at least 90, warns below 90 for accessibility, best practices and SEO, and publishes reports and median category scores in the workflow artifacts and summary.
 To run the prod checks locally, build the app, run `npm run start:ssr -- --port 4173`, then in another terminal run `npx --yes @lhci/cli@0.15.1 autorun --upload.target=temporary-public-storage` and `node scripts/lighthouse-summary.mjs`.
 Lighthouse reports are uploaded to temporary public storage.
