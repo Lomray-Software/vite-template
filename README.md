@@ -1,6 +1,6 @@
 # Minimal SSR example
 
-This is the `example/minimal` branch of vite-template, using React 19, React Router 8, Vite 8, and vite-ssr-boost 8 beta.
+This is the `example/minimal` branch of vite-template, using React 19, React Router 8, Vite 8, and vite-ssr-boost 8.0.0.
 The app uses React Router [Data mode](https://reactrouter.com/start/modes#data).
 
 - Server-rendered pages with a title and description from a request-scoped meta manager.
@@ -14,7 +14,7 @@ The app uses React Router [Data mode](https://reactrouter.com/start/modes#data).
 Use Node 22.23.2 (`.nvmrc`) and npm.
 The six direct runtime dependencies and their versions are listed in [package.json](package.json).
 They are `react`, `react-dom`, `react-router`, `@lomray/vite-ssr-boost`, `@lomray/react-head-manager`, and `isbot`.
-Keep vite-ssr-boost on the `^8.0.0-beta.5` range while using this example.
+Keep vite-ssr-boost on the `^8.0.0` range while using this example.
 The head manager also installs `@lomray/consistent-suspense` as a transitive peer dependency; application code does not import it.
 
 This comparison starts with Data-mode route objects, a shared `App` wrapper, and metadata already in the SPA.
