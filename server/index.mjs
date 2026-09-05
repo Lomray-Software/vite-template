@@ -1,33 +1,17 @@
-import { readFile } from 'node:fs/promises';
 import { join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fastifyStatic from '@fastify/static';
 import adapterFastify from '@lomray/vite-ssr-boost/adapters/fastify';
-import ServerConfig from '@lomray/vite-ssr-boost/services/server-config';
-import SsrManifest from '@lomray/vite-ssr-boost/services/ssr-manifest';
+import { createRouteAssetPreparer, loadHtmlShell } from '@lomray/vite-ssr-boost/node/production';
 import Fastify from 'fastify';
 import { configureHandler, handler } from '../build/server/server.js';
 
-const clientDir = fileURLToPath(new URL('../build/client/', import.meta.url));
-const parts = (await readFile(join(clientDir, 'index.html'), 'utf8')).split('<!--ssr-outlet-->');
-
-if (parts.length !== 2) {
-  throw new Error('Build SSR output with npm run build before starting Fastify.');
-}
-
-const [header, footer] = parts;
-const config = ServerConfig.init({ isProd: true, isOnlyClient: false });
-const manifest = SsrManifest.get(config);
+const buildDir = fileURLToPath(new URL('../build/', import.meta.url));
+const clientDir = join(buildDir, 'client');
 
 configureHandler({
-  getHtml: () => ({ header, footer }),
-  prepare: async ({ context, executionContext }) => {
-    const hints = manifest.injectAssets(context);
-
-    if (hints.has('Link')) {
-      await executionContext?.onEarlyHints?.(hints);
-    }
-  },
+  getHtml: await loadHtmlShell({ indexFile: join(clientDir, 'index.html') }),
+  prepare: createRouteAssetPreparer({ buildDir }),
 });
 
 const app = Fastify();
