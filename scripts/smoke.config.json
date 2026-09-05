@@ -3,7 +3,53 @@
     {
       "path": "/",
       "status": 200,
-      "contains": ["Minimal SSR example", "window.__staticRouterHydrationData"]
+      "contains": [
+        "Minimal SSR example",
+        "window.__staticRouterHydrationData",
+        "<h1>Minimal SSR example</h1>",
+        "<html lang=\"en\""
+      ]
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "headers": {
+        "Accept-Language": "es"
+      },
+      "contains": ["<h1>Ejemplo mínimo de SSR</h1>", "<html lang=\"es\""]
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "headers": {
+        "Cookie": "lang=es",
+        "Accept-Language": "en"
+      },
+      "contains": ["<h1>Ejemplo mínimo de SSR</h1>", "<html lang=\"es\""]
+    },
+    {
+      "path": "/about",
+      "status": 200,
+      "headers": {
+        "Accept-Language": "es"
+      },
+      "contains": ["<h1>Acerca de este ejemplo</h1>", "rel=\"stylesheet\"", "<html lang=\"es\""]
+    },
+    {
+      "path": "/users",
+      "status": 200,
+      "headers": {
+        "Accept-Language": "es"
+      },
+      "contains": ["<h1>Usuarios</h1>", "Ada Lovelace"]
+    },
+    {
+      "path": "/missing",
+      "status": 404,
+      "headers": {
+        "Accept-Language": "es"
+      },
+      "contains": ["<h1>Página no encontrada</h1>"]
     },
     {
       "path": "/users",

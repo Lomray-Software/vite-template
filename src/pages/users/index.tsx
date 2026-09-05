@@ -1,5 +1,6 @@
 import { Meta } from '@lomray/react-head-manager';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useLoaderData } from 'react-router';
 import users from '@data/users';
 
@@ -12,16 +13,19 @@ export const loader = async () => {
 };
 
 const Users: FC = () => {
+  const { t } = useTranslation();
   const data = useLoaderData<typeof loader>();
 
   return (
     <>
       <Meta>
-        <title>Users | Minimal SSR example</title>
-        <meta name="description" content="Users loaded before the server sends the page." />
+        <title>
+          {t('users.heading')} | {t('home.heading')}
+        </title>
+        <meta name="description" content={t('users.description')} />
       </Meta>
-      <h1>Users</h1>
-      <p>The loader waits 300 ms, then returns this list as resolved data.</p>
+      <h1>{t('users.heading')}</h1>
+      <p>{t('users.intro')}</p>
       <ul>
         {data.map((user) => (
           <li key={user.id}>

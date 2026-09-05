@@ -1,0 +1,39 @@
+{
+  "checkIt": "English version.",
+  "home": {
+    "heading": "Minimal SSR example",
+    "description": "A minimal React app with server rendering and route loaders.",
+    "intro": "React routes, server-rendered HTML, and the same app in your browser.",
+    "users": "Load users before rendering",
+    "profile": "Open a user profile",
+    "loaderError": "Try a loader that returns 404",
+    "about": "Load a page with its own stylesheet",
+    "redirect": "Follow a server-aware redirect",
+    "clientOnly": "Open a browser-only page",
+    "missing": "Try an unknown route"
+  },
+  "users": {
+    "heading": "Users",
+    "description": "Users loaded before the server sends the page.",
+    "intro": "The loader waits 300 ms, then returns this list as resolved data."
+  },
+  "about": {
+    "heading": "About this example",
+    "description": "A lazy route with its own CSS module, included in server-rendered HTML.",
+    "intro": "This page is a lazy route. Its stylesheet is included in the server-rendered document."
+  },
+  "notFound": {
+    "heading": "Page not found",
+    "description": "The requested page does not exist.",
+    "home": "Go home"
+  },
+  "layout": {
+    "navigation": "Main navigation",
+    "home": "Home",
+    "users": "Users",
+    "about": "About",
+    "clientOnly": "Client only",
+    "loading": "Loading page…",
+    "language": "Language"
+  }
+}
