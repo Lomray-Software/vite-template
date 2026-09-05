@@ -1,38 +1,18 @@
-import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
-import { isRouteErrorResponse, useRouteError } from 'react-router';
-import { WINDOW_OBJ } from '@constants/index';
-import Error from './components/error';
-import NotExist from './components/not-exist';
+import { Meta } from '@lomray/react-head-manager';
+import ResponseStatus from '@lomray/vite-ssr-boost/components/response-status';
+import type { FC } from 'react';
+import { Link } from 'react-router';
 
-/**
- * Not found page
- * @constructor
- */
-const NotFound: FCRoute = () => {
-  const error = useRouteError() as Error;
-
-  /**
-   * Reload page when page isn't loaded (ex. happens when chunks names different)
-   */
-  if (
-    WINDOW_OBJ &&
-    (error?.message?.startsWith('Failed to fetch dynamically imported module') ||
-      error?.message?.startsWith('Unable to preload') ||
-      error?.message?.includes('Importing a module script failed'))
-  ) {
-    console.error('Failed to fetch dynamically imported module #1.', error);
-
-    // eslint-disable-next-line no-self-assign
-    WINDOW_OBJ.location.href = WINDOW_OBJ.location.href;
-
-    return null;
-  }
-
-  if (isRouteErrorResponse(error)) {
-    return <NotExist status={error.status} />;
-  }
-
-  return <Error e={error} />;
-};
+const NotFound: FC = () => (
+  <>
+    <Meta>
+      <title>Not found | Minimal SSR example</title>
+      <meta name="description" content="The requested page does not exist." />
+    </Meta>
+    <ResponseStatus status={404} />
+    <h1>Page not found</h1>
+    <Link to="/">Go home</Link>
+  </>
+);
 
 export default NotFound;

@@ -1,0 +1,13 @@
+import { Manager as MetaManager } from '@lomray/react-head-manager';
+import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router';
+import routes from '@routes/index';
+import App from './app';
+
+const router = createBrowserRouter(routes);
+const metaManager = new MetaManager();
+
+createRoot(document.getElementById('root')!).render(
+  createElement(App, { client: { metaManager } }, createElement(RouterProvider, { router })),
+);

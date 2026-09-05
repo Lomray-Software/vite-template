@@ -1,18 +1,25 @@
-import ScrollToTop from '@lomray/vite-ssr-boost/components/scroll-to-top';
 import type { FC } from 'react';
-import { Outlet } from 'react-router';
+import { Link, Outlet, useNavigation } from 'react-router';
 
-/**
- * Application layout
- * @constructor
- */
-const AppLayout: FC = () => (
-  <div>
-    <ScrollToTop />
-    <main className="main">
-      <Outlet />
-    </main>
-  </div>
-);
+const AppLayout: FC = () => {
+  const navigation = useNavigation();
+
+  return (
+    <>
+      <header>
+        <nav aria-label="Main navigation">
+          <Link to="/">Home</Link>
+          <Link to="/users">Users</Link>
+          <Link to="/about">About</Link>
+          <Link to="/client-only">Client only</Link>
+        </nav>
+        <p role="status">{navigation.state !== 'idle' ? 'Loading page…' : null}</p>
+      </header>
+      <main>
+        <Outlet />
+      </main>
+    </>
+  );
+};
 
 export default AppLayout;
