@@ -16,11 +16,12 @@
     "style:check": "stylelint \"src/**/*.{css,scss}\"",
     "style:format": "stylelint --fix \"src/**/*.{css,scss}\"",
     "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "size:check": "node scripts/size-budget.mjs"
   },
   "dependencies": {
     "@fastify/static": "^10.1.3",
-    "@lomray/react-head-manager": "^2.1.1",
+    "@lomray/react-head-manager": "^2.1.2",
     "@lomray/vite-ssr-boost": "^8.1.0",
     "fastify": "^5.12.3",
     "isbot": "^5.2.2",
@@ -42,7 +43,7 @@
     "eslint": "^10.10.0",
     "globals": "^17.12.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.4.1",
+    "lint-staged": "^17.5.0",
     "prettier": "^3.9.6",
     "semantic-release": "^25.0.9",
     "stylelint": "^17.15.0",
