@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "develop": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}

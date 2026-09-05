@@ -1,14 +1,37 @@
 {
   "routes": [
-    { "path": "/", "status": 200, "contains": ["window.__staticRouterHydrationData"] },
-    { "path": "/not-lazy", "status": 200, "contains": ["Styled text"] },
-    { "path": "/redirect-demo", "status": 301 },
-    { "path": "/missing", "status": 404 },
-    { "path": "/details", "status": 200 },
-    { "path": "/nested-suspense", "status": 200 },
-    { "path": "/error-boundary", "status": 200 },
-    { "path": "/only-client-page", "status": 200 }
+    {
+      "path": "/",
+      "status": 200,
+      "contains": ["Minimal SSR example", "window.__staticRouterHydrationData"]
+    },
+    {
+      "path": "/users",
+      "status": 200,
+      "contains": ["Ada Lovelace"]
+    },
+    {
+      "path": "/users/999",
+      "status": 404
+    },
+    {
+      "path": "/about",
+      "status": 200,
+      "contains": ["rel=\"stylesheet\""]
+    },
+    {
+      "path": "/redirect",
+      "status": 301
+    },
+    {
+      "path": "/client-only",
+      "status": 200
+    },
+    {
+      "path": "/missing",
+      "status": 404
+    }
   ],
-  "streamPath": "/details",
+  "streamPath": "/about",
   "crawlerCookie": "isCrawler=1"
 }

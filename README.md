@@ -1,170 +1,255 @@
-# Vite template
+# Minimal SSR example
 
-## Branches
+This is the `example/minimal` branch of vite-template, using React 19, React Router 8, Vite 8, and vite-ssr-boost 8 beta.
+The app uses React Router [Data mode](https://reactrouter.com/start/modes#data).
 
-| Branch | What it shows | When to start from it | Link |
-| --- | --- | --- | --- |
-| `prod` | Streaming SSR, MobX, consistent Suspense, meta tags and route management | Use the full reference app | [Browse](https://github.com/Lomray-Software/vite-template/tree/prod) |
-| `example/minimal` (planned) | Minimal SSR with loaders and route-level CSS | Start with a small SSR app once available | Planned |
-| `example/custom-server` (planned) | A custom Fastify server | Own the production server once available | Planned |
-| `example/localization` (planned) | Localization with server and client language state | Add localization once available | Planned |
+- Server-rendered pages with a title and description from a request-scoped meta manager.
+- Resolved loader data on `/users`, a user page on `/users/:id`, and a loader error boundary for unknown IDs.
+- A lazy `/about` route with its own CSS module injected into the server response.
+- A server-aware 301 redirect, a browser-only route with a fallback, and a 404 page.
+- Development reloads and SSR or SPA builds from the same application.
 
-## Demo links
+## From a plain Vite SPA to this project
 
-### Streaming supported
+Use Node 22.23.2 (`.nvmrc`) and npm.
+The six direct runtime dependencies and their versions are listed in [package.json](package.json).
+They are `react`, `react-dom`, `react-router`, `@lomray/vite-ssr-boost`, `@lomray/react-head-manager`, and `isbot`.
+Keep vite-ssr-boost on the `^8.0.0-beta.5` range while using this example.
+The head manager also installs `@lomray/consistent-suspense` as a transitive peer dependency; application code does not import it.
 
-- [SSR Docker (Streaming supported)](https://vite-template.lomray.com/)
-- [SSR Vercel (Streaming supported)](https://vite-template-three.vercel.app/)
+This comparison starts with Data-mode route objects, a shared `App` wrapper, and metadata already in the SPA.
+The shared files are [src/app.tsx](src/app.tsx), [src/routes/index.ts](src/routes/index.ts), [src/constants/state-key.ts](src/constants/state-key.ts), the pages, and [tsconfig.json](tsconfig.json).
+`App` accepts a meta manager through its `client` or `server` props and provides it to the route tree.
+If your SPA has no metadata provider, add that shared wrapper before applying these entry changes.
+The `.txt` files in [docs/spa-before](docs/spa-before) preserve the before sources at the target paths shown below; they are documentation fixtures, not a second application.
+The after blocks are copied from this branch's files, with no omitted lines.
 
-### Streaming not supported
+### `vite.config.ts`
 
-- [SSR Amplify (Streaming not supported)](https://prod.d947n8vxd7uac.amplifyapp.com/)
+Before — source: [docs/spa-before/vite.config.ts.txt](docs/spa-before/vite.config.ts.txt), copied to `vite.config.ts`.
 
-### SPA
+```ts
+import devtoolsJson from 'vite-plugin-devtools-json';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
-- [SPA Amplify](https://prod.d2fyemmi74bwx3.amplifyapp.com/)
-
-## Explore
- - [prod](https://github.com/Lomray-Software/vite-template/tree/prod) current branch with Mobx + Store Manager, Head Manager (meta), Route Manager
- - [feature/localization](https://github.com/Lomray-Software/vite-template/tree/feature/localization) branch with example of localization
-
-## Used libraries
- - [VITE SSR BOOST](https://github.com/Lomray-Software/vite-ssr-boost)
- - [CONSISTENT SUSPENSE](https://github.com/Lomray-Software/consistent-suspense)
- - [REACT MOBX MANAGER](https://github.com/Lomray-Software/react-mobx-manager)
- - [REACT HEAD MANAGER](https://github.com/Lomray-Software/react-head-manager)
- - [REACT ROUTE MANAGER](https://github.com/Lomray-Software/react-route-manager)
-
-# Local development
-
-```bash
-git clone git@github.com:Lomray-Software/vite-template.git
-npm ci
-npm run develop
+// https://vitejs.dev/config/
+export default defineConfig({
+  root: 'src',
+  publicDir: '../public',
+  envDir: '../',
+  resolve: { tsconfigPaths: true },
+  build: {
+    outDir: '../build',
+    emptyOutDir: true,
+  },
+  plugins: [devtoolsJson(), react()],
+});
 ```
 
-## Structure
-- `constants/index` - configure application constants
-- `common/services/route-manager` - configure site routes
+After — source: [vite.config.ts](vite.config.ts).
 
-## Bundle analyze
-```bash
-vite-bundle-visualizer
+```ts
+import SsrBoost from '@lomray/vite-ssr-boost/plugin';
+import devtoolsJson from 'vite-plugin-devtools-json';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  root: 'src',
+  publicDir: '../public',
+  envDir: '../',
+  build: {
+    outDir: '../build',
+  },
+  plugins: [devtoolsJson(), SsrBoost(), react()],
+});
 ```
 
-## Git workflow
-__NOTE: see .github for understand CI/CD__
-1. Create feature, bugfix, etc.
-2. Create Pull Request & test
-3. Squash & merge into `prod`
+`SsrBoost()` also reads the existing tsconfig aliases, so the before configuration’s `resolve.tsconfigPaths` is no longer needed.
 
-## Some cases to pay attention to.
- - Right solution for wrap `<Outlet />` into `<Suspense />`. If you would like to wrap your lazy routes only once:
-```typescript jsx
-import { Outlet, useLocation } from 'react-router-dom';
-import type { FCRoute } from '@lomray/vite-ssr-boost/interfaces/fc-route';
-import { Suspense } from '@lomray/consistent-suspense';
+### `src/index.html`
 
-/**
- * NOTE: without key it's doesn't work
- * @see https://github.com/remix-run/react-router/issues/10568
- * @constructor
- */
-const MyLayout: FCRoute = () => {
-  const { key } = useLocation();
+Before — source: [docs/spa-before/src/index.html.txt](docs/spa-before/src/index.html.txt), copied to `src/index.html`.
 
-  return (
-    <Suspense key={key}>
-      <Outlet/>
-    </Suspense>
-  )
-}
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/client.ts" async></script>
+  </body>
+</html>
 ```
 
-- In some cases nested Suspense should be memorized for preventing "This Suspense boundary received an update before it finished hydrating."
-```typescript jsx
-/**
- * Parent component can receive update what will entail rerender.
- * We should avoid rerenders for children suspense. 
- * @constructor
- */
-const Parent: FC = () => {
-  /**
-   * Memorize Suspense to avoid errors
-   */
-  const children = useMemo(
-    () => (
-      <Suspense fallback={<Fallback/>}>
-        <UserWrapper id={id} fields={restFields}/>
-      </Suspense>
-    ),
-    [],
-  );
+After — source: [src/index.html](src/index.html).
 
-  return (
-    <div style={{ paddingLeft: '50px', textAlign: 'left' }}>
-      {children}
-    </div>
-  );
-}
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div id="root"><!--ssr-outlet--></div>
+    <script type="module" src="/client.ts" async></script>
+  </body>
+</html>
 ```
 
-## Docker build
-[See github workflow](.github/workflows/release.yml) or
-```bash
-npm run build
-ssr-boost build-docker --image-name test-image
+The only HTML change from the SPA is `<!--ssr-outlet-->`.
+
+### `src/client.ts`
+
+Before — source: [docs/spa-before/src/client.ts.txt](docs/spa-before/src/client.ts.txt), copied to `src/client.ts`.
+
+```ts
+import { Manager as MetaManager } from '@lomray/react-head-manager';
+import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router';
+import routes from '@routes/index';
+import App from './app';
+
+const router = createBrowserRouter(routes);
+const metaManager = new MetaManager();
+
+createRoot(document.getElementById('root')!).render(
+  createElement(App, { client: { metaManager } }, createElement(RouterProvider, { router })),
+);
 ```
 
-## AWS Amplify build (amplify.yml) - SPA
-```yaml
-version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - nvm use 22.23.2
-        - npm ci
-    build:
-      commands:
-        - npm run build -- --focus-only client
-  artifacts:
-    baseDirectory: build/client
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
+After — source: [src/client.ts](src/client.ts).
+
+```ts
+import { Manager as MetaManager } from '@lomray/react-head-manager';
+import entryClient from '@lomray/vite-ssr-boost/browser/entry';
+import getServerState from '@lomray/vite-ssr-boost/helpers/get-server-state';
+import StateKey from '@constants/state-key';
+import routes from '@routes/index';
+import App from './app';
+
+void entryClient(App, routes, {
+  init: () =>
+    Promise.resolve({
+      metaManager: new MetaManager(getServerState(StateKey.metaManager, import.meta.env.PROD)),
+    }),
+});
 ```
 
-## AWS Amplify build (amplify.yml) - SSR
-```yaml
-version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - nvm use 22.23.2
-        - npm pkg delete scripts.prepare
-        - npm ci
-    build:
-      commands:
-        - npm run build -- --eject
-        - npm run build:amplify
-  artifacts:
-    baseDirectory: .amplify-hosting
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
+### `src/server.ts`
+
+Before: no server entry exists in the SPA.
+
+After — source: [src/server.ts](src/server.ts).
+
+```ts
+import { Manager as MetaManager } from '@lomray/react-head-manager';
+import MetaServer from '@lomray/react-head-manager/server';
+import entryServer from '@lomray/vite-ssr-boost/adapters/express/entry';
+import { isbot } from 'isbot';
+import StateKey from '@constants/state-key';
+import routes from '@routes/index';
+import App from './app';
+
+export default entryServer(App, routes, {
+  init: () => ({
+    onRequest: () => ({ appProps: { metaManager: new MetaManager() } }),
+    onRouterReady: ({ context: { request } }) => ({
+      isStream:
+        !isbot(request.headers.get('user-agent') ?? '') &&
+        !/(?:^|;\s*)isCrawler=1(?:;|$)/.test(request.headers.get('cookie') ?? ''),
+    }),
+    onShellReady: ({ context: { appProps, html } }) => ({
+      header: MetaServer.inject(html.header, appProps.metaManager),
+    }),
+    getState: ({ context: { appProps } }) => ({
+      [StateKey.metaManager]: MetaServer.getState(appProps.metaManager),
+    }),
+  }),
+});
 ```
 
-## Vercel build (vercel.json) - SSR
+A new meta manager is created for each request, its tags are injected before the shell, and its state is restored by the client entry.
+Crawler user agents or the `isCrawler=1` cookie select a complete response instead of streaming.
+
+### `package.json scripts`
+
+Before — source: [docs/spa-before/package.json.txt](docs/spa-before/package.json.txt), copied to `package.json`.
+
 ```json
 {
-  "buildCommand": "npm pkg delete scripts.prepare && npm run build -- --serverless && npm run build:vercel",
-  "installCommand": "npm ci",
-  "outputDirectory": ".vercel/output"
+  "scripts": {
+    "develop": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
 }
 ```
+
+After — source: [package.json](package.json) (the complete `scripts` object; keep the dependency and tooling fields).
+
+```json
+{
+  "scripts": {
+    "develop": "ssr-boost dev",
+    "build": "ssr-boost build",
+    "build:spa": "ssr-boost build --focus-only client",
+    "start:ssr": "ssr-boost start",
+    "start:spa": "ssr-boost start --focus-only client",
+    "preview": "ssr-boost preview",
+    "smoke": "node scripts/smoke.mjs",
+    "lint:check": "eslint \"src/**/*.{ts,tsx,*.ts,*tsx}\" --max-warnings=0",
+    "lint:format": "eslint --fix \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
+    "style:check": "stylelint \"src/**/*.{css,scss}\"",
+    "style:format": "stylelint --fix \"src/**/*.{css,scss}\"",
+    "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
+    "prepare": "husky"
+  }
+}
+```
+
+## Commands
+
+Run `npm ci` after cloning the branch.
+These commands call the scripts in [package.json](package.json):
+
+| Command             | Result                                    |
+| ------------------- | ----------------------------------------- |
+| `npm run develop`   | Start the development server.             |
+| `npm run build`     | Build the server and browser output.      |
+| `npm run start:ssr` | Serve the SSR build.                      |
+| `npm run build:spa` | Build only the browser output.            |
+| `npm run start:spa` | Serve the SPA build.                      |
+| `npm run smoke`     | Build and verify both SSR and SPA output. |
+
+Run the matching build before starting a server; rebuild SSR after `npm run smoke`, which finishes with a SPA build.
+For a development port override, set `VITE_PORT` to the same port in `.env.development.local` and pass `-- --port` to `npm run develop`.
+
+This branch disables Vercel automatic deployments; the `prod` branch keeps the demo deployments.
+
+## Pitfalls
+
+- Browser globals: keep `window` out of module scope in server-imported code; use a lazy `onlyClient` route with a fallback for browser-only pages ([working route](src/routes/index.ts), [page](src/pages/client-only/index.tsx)).
+- Loader promises: await first-paint data before returning it, because nested promises become `{}` when `window.__staticRouterHydrationData` is serialized with `JSON.stringify`, so `<Await>` or `use()` cannot hydrate that data; streamed data needs component-level Suspense, a request-scoped cache, and `getState` ([serializer](https://github.com/Lomray-Software/vite-ssr-boost/blob/staging/src/helpers/build-router-state.ts), [resolved loader](src/pages/users/index.tsx), [streamed data example](https://github.com/Lomray-Software/vite-template/tree/prod)).
+- Dependency CSS: add packages that import CSS to `ssr.noExternal` when they need Vite's server transforms ([Vite SSR externals](https://vite.dev/guide/ssr.html#ssr-externals)).
+- Environment variables: read public values through `import.meta.env`, keep secrets out of `VITE_*`, and restart development after changing env files ([Vite env variables](https://vite.dev/guide/env-and-mode.html)).
+- Hydration mismatches: compare the initial browser render with the server HTML and check data, dates, randomness, and browser-dependent branches ([React hydration troubleshooting](https://react.dev/reference/react-dom/client/hydrateRoot#troubleshooting)).
+
+## Need more?
+
+| Branch                                                                                               | What it shows                                                      |
+| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [prod](https://github.com/Lomray-Software/vite-template/tree/prod)                                   | Streamed data, MobX, consistent Suspense, and deployment examples. |
+| [example/custom-server](https://github.com/Lomray-Software/vite-template/tree/example/custom-server) | Planned.                                                           |
+| [example/localization](https://github.com/Lomray-Software/vite-template/tree/example/localization)   | Planned.                                                           |

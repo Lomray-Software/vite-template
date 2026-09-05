@@ -1,5 +1,4 @@
 enum StateKey {
-  storeManager = '_storeState_',
   metaManager = '_metaState_',
 }
 

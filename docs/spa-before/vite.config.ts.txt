@@ -1,4 +1,3 @@
-import SsrBoost from '@lomray/vite-ssr-boost/plugin';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
@@ -8,8 +7,10 @@ export default defineConfig({
   root: 'src',
   publicDir: '../public',
   envDir: '../',
+  resolve: { tsconfigPaths: true },
   build: {
     outDir: '../build',
+    emptyOutDir: true,
   },
-  plugins: [devtoolsJson(), SsrBoost(), react()],
+  plugins: [devtoolsJson(), react()],
 });
