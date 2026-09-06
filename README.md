@@ -110,10 +110,6 @@ Before: no Wrangler configuration. After: [wrangler.jsonc](wrangler.jsonc), comp
   "name": "vite-template-cloudflare",
   "main": "build/worker/worker.js",
   "compatibility_date": "2026-09-05",
-  // Head metadata parsing needs the string parser, not the browser DOM implementation.
-  "alias": {
-    "html-dom-parser": "html-dom-parser/lib/server/html-to-dom"
-  },
   "assets": {
     "directory": "build/client",
     "binding": "ASSETS",
@@ -133,7 +129,7 @@ Before: no Wrangler configuration. After: [wrangler.jsonc](wrangler.jsonc), comp
 
 `run_worker_first` allows SSR at `/` and cache headers on hashed assets. Disabling HTML handling lets the shell helper fetch `/index.html` without a redirect. Disabling the asset 404 fallback lets React Router return real 404 responses. See [Cloudflare HTML handling](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/).
 
-The `html-dom-parser` alias selects its published string parser for the head manager. Wrangler otherwise selects a browser implementation that requires `document`. This alias applies only to the Worker bundle and needs no Node compatibility flag.
+The head manager's server entry (`@lomray/react-head-manager` 2.2.1 and later) parses head markup without a DOM, so the Worker bundle needs no parser alias and no Node compatibility flag.
 
 ### `package.json` and types
 

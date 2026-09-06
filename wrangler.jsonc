@@ -3,10 +3,6 @@
   "name": "vite-template-cloudflare",
   "main": "build/worker/worker.js",
   "compatibility_date": "2026-09-05",
-  // Head metadata parsing needs the string parser, not the browser DOM implementation.
-  "alias": {
-    "html-dom-parser": "html-dom-parser/lib/server/html-to-dom"
-  },
   "assets": {
     "directory": "build/client",
     "binding": "ASSETS",
