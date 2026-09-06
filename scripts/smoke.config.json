@@ -6,6 +6,12 @@
       "contains": ["Minimal SSR example", "window.__staticRouterHydrationData"]
     },
     {
+      "path": "/deferred",
+      "status": 200,
+      "contains": ["Deferred data"],
+      "containsAny": ["Loading users with Await", "Ada Lovelace"]
+    },
+    {
       "path": "/users",
       "status": 200,
       "contains": ["Ada Lovelace"]
@@ -33,5 +39,11 @@
     }
   ],
   "streamPath": "/about",
-  "crawlerCookie": "isCrawler=1"
+  "crawlerCookie": "isCrawler=1",
+  "crawlerRoutes": [
+    {
+      "path": "/deferred",
+      "contains": ["<li>Ada Lovelace</li>", "<li>Grace Hopper</li>", "<li>Margaret Hamilton</li>"]
+    }
+  ]
 }

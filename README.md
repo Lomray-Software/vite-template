@@ -1,10 +1,11 @@
 # Minimal SSR example
 
-This is the `example/minimal` branch of vite-template, using React 19, React Router 8, Vite 8, and vite-ssr-boost 8.0.0.
+This is the `example/minimal` branch of vite-template, using React 19, React Router 8, Vite 8, and vite-ssr-boost 8.3.0-beta.1.
 The app uses React Router [Data mode](https://reactrouter.com/start/modes#data).
 
 - Server-rendered pages with a title and description from a request-scoped meta manager.
 - Resolved loader data on `/users`, a user page on `/users/:id`, and a loader error boundary for unknown IDs.
+- `/deferred` (Deferred data) streams a static user list after 1.5 seconds from a loader promise through React Router `<Await>`, with a title and counter in the shell.
 - A lazy `/about` route with its own CSS module injected into the server response.
 - A server-aware 301 redirect, a browser-only route with a fallback, and a 404 page.
 - Development reloads and SSR or SPA builds from the same application.
@@ -14,7 +15,7 @@ The app uses React Router [Data mode](https://reactrouter.com/start/modes#data).
 Use Node 22.23.2 (`.nvmrc`) and npm.
 The six direct runtime dependencies and their versions are listed in [package.json](package.json).
 They are `react`, `react-dom`, `react-router`, `@lomray/vite-ssr-boost`, `@lomray/react-head-manager`, and `isbot`.
-Keep vite-ssr-boost on the `^8.0.0` range while using this example.
+Keep vite-ssr-boost on the `^8.3.0-beta.1` range while using this example.
 The head manager also installs `@lomray/consistent-suspense` as a transitive peer dependency; application code does not import it.
 
 This comparison starts with Data-mode route objects, a shared `App` wrapper, and metadata already in the SPA.
@@ -241,7 +242,7 @@ This branch disables Vercel automatic deployments; the `prod` branch keeps the d
 ## Pitfalls
 
 - Browser globals: keep `window` out of module scope in server-imported code; use a lazy `onlyClient` route with a fallback for browser-only pages ([working route](src/routes/index.ts), [page](src/pages/client-only/index.tsx)).
-- Loader promises: await first-paint data before returning it, because nested promises become `{}` when `window.__staticRouterHydrationData` is serialized with `JSON.stringify`, so `<Await>` or `use()` cannot hydrate that data; streamed data needs component-level Suspense, a request-scoped cache, and `getState` ([serializer](https://github.com/Lomray-Software/vite-ssr-boost/blob/staging/src/helpers/build-router-state.ts), [resolved loader](src/pages/users/index.tsx), [streamed data example](https://github.com/Lomray-Software/vite-template/tree/prod)).
+- Loader promises: return critical data immediately and leave slow fields as promises, then read them with `<Await>` inside React `<Suspense>` ([deferred page](src/pages/deferred/index.tsx), [streaming guide](https://github.com/Lomray-Software/vite-ssr-boost/blob/staging/docs/guide/data-streaming.md)). This example keeps the default footer hydration; the `prod` branch also demonstrates early shell hydration and React 19 `use()`.
 - Dependency CSS: add packages that import CSS to `ssr.noExternal` when they need Vite's server transforms ([Vite SSR externals](https://vite.dev/guide/ssr.html#ssr-externals)).
 - Environment variables: read public values through `import.meta.env`, keep secrets out of `VITE_*`, and restart development after changing env files ([Vite env variables](https://vite.dev/guide/env-and-mode.html)).
 - Hydration mismatches: compare the initial browser render with the server HTML and check data, dates, randomness, and browser-dependent branches ([React hydration troubleshooting](https://react.dev/reference/react-dom/client/hydrateRoot#troubleshooting)).

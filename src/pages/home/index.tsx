@@ -15,6 +15,9 @@ const Home: FC = () => (
     <p>React routes, server-rendered HTML, and the same app in your browser.</p>
     <ul>
       <li>
+        <Link to="/deferred">Deferred data</Link>
+      </li>
+      <li>
         <Link to="/users">Load users before rendering</Link>
       </li>
       <li>

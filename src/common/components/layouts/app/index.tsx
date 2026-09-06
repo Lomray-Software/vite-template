@@ -10,6 +10,7 @@ const AppLayout: FC = () => {
         <nav aria-label="Main navigation">
           <Link to="/">Home</Link>
           <Link to="/users">Users</Link>
+          <Link to="/deferred">Deferred data</Link>
           <Link to="/about">About</Link>
           <Link to="/client-only">Client only</Link>
         </nav>
