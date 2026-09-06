@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: ${{ github.event_name == 'schedule' && fromJSON('["prod", "example/minimal", "example/tanstack-query", "example/custom-server", "example/localization"]') || fromJSON(format('["{0}"]', github.ref_name)) }}
+        branch: ${{ github.event_name == 'schedule' && fromJSON('["prod", "example/minimal", "example/tanstack-query", "example/custom-server", "example/localization", "example/cloudflare"]') || fromJSON(format('["{0}"]', github.ref_name)) }}
     concurrency:
       group: ${{ matrix.branch }}-check-example
       cancel-in-progress: true

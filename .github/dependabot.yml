@@ -120,3 +120,27 @@ updates:
     ignore:
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
+
+  - package-ecosystem: npm
+    directory: /
+    target-branch: example/cloudflare
+    schedule:
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: Etc/UTC
+    open-pull-requests-limit: 5
+    labels: [dependencies]
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      lomray:
+        patterns: ['@lomray/*']
+        update-types: [major, minor, patch]
+      non-major:
+        patterns: ['*']
+        exclude-patterns: ['@lomray/*']
+        update-types: [minor, patch]
+    ignore:
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
