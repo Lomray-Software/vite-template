@@ -13,7 +13,7 @@ import App from './app';
  */
 void entryClient(App, routes, {
   init: async ({ isSSRMode }) => {
-    // The entry waits for the streamed footer before reading transferred state.
+    // The entry waits for shell state and React's shell marker before hydration.
     const initState = isSSRMode ? getServerState(StateKey.storeManager, IS_PROD) : undefined;
     const metaState = isSSRMode ? getServerState(StateKey.metaManager, IS_PROD) : undefined;
     const metaManager = new MetaManager(metaState);

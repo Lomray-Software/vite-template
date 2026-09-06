@@ -19,6 +19,10 @@ const routes: TRouteObject[] = [
         lazy: () => import('@pages/home'),
       },
       {
+        path: RouteManager.path('deferred'),
+        lazy: () => import('@pages/deferred'),
+      },
+      {
         path: RouteManager.path('details'),
         children: DetailsRoutes,
       },

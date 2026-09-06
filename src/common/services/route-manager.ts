@@ -17,6 +17,9 @@ const manager = new Manager({
         },
       },
     },
+    deferred: {
+      url: '/deferred',
+    },
     errorBoundary: {
       url: '/error-boundary',
     },

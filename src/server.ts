@@ -24,6 +24,8 @@ const isBot = createIsbotFromList(list.filter((record) => !patternsToRemove.has(
 export default entryServer(App, routes, {
   abortDelay: 20000,
   init: () => ({
+    // getState is ready at onShellReady; later MobX stores use ManagerStream below.
+    hydration: 'early',
     /**
      * Once after create server
      */
@@ -108,7 +110,7 @@ export default entryServer(App, routes, {
       return isEnd ? streamSuspense.end() : streamSuspense.analyze(html);
     },
     /**
-     * Return server state to client (once when app she'll ready) for:
+     * Return server state to client once at shell readiness for:
      * 1. Mobx manager (stores)
      * 2. Meta manager
      */

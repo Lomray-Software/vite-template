@@ -47,6 +47,12 @@ npm run develop
 - `constants/index` - configure application constants
 - `common/services/route-manager` - configure site routes
 
+## Demo routes
+
+- `/details` shows streamed component data with MobX and consistent-suspense.
+- `/nested-suspense` shows nested boundaries for streamed MobX data.
+- `/deferred` (Deferred data) streams a static user list after 1.5 seconds from a loader promise, read with React Router `<Await>` and React 19 `use()`, with a counter in the shell.
+
 ## Bundle analyze
 ```bash
 vite-bundle-visualizer
@@ -70,6 +76,9 @@ To run the prod checks locally, build the app, run `npm run start:ssr -- --port 
 Lighthouse reports are uploaded to temporary public storage.
 
 ## Some cases to pay attention to.
+
+With vite-ssr-boost `^8.3.0-beta.1` in Data mode, return slow values as promises inside the loader result, such as `{ title: 'Deferred data', users: fetchUsers() }`, and read them with `<Await>` or React 19 `use()` inside React `<Suspense>` boundaries. The `/deferred` page demonstrates both consumers sharing one promise. This template enables `hydration: 'early'`: request-scoped managers are initialized before rendering, `getState` snapshots are available at `onShellReady`, and later MobX stores still travel through `ManagerStream` before their boundaries resolve. Shell controls keep their state local so updates do not rerender pending boundaries. See the [streaming guide](https://github.com/Lomray-Software/vite-ssr-boost/blob/staging/docs/guide/data-streaming.md).
+
  - Right solution for wrap `<Outlet />` into `<Suspense />`. If you would like to wrap your lazy routes only once:
 ```typescript jsx
 import { Outlet, useLocation } from 'react-router-dom';
