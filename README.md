@@ -6,6 +6,7 @@
 | --- | --- | --- | --- |
 | `prod` | Streaming SSR, MobX, consistent Suspense, meta tags and route management | Use the full reference app | [Browse](https://github.com/Lomray-Software/vite-template/tree/prod) |
 | `example/minimal` | Six runtime dependencies, loaders, a lazy route with CSS, redirect, client-only route and 404, plus the SPA-to-SSR file diff | Start with a small SSR app | [Browse](https://github.com/Lomray-Software/vite-template/tree/example/minimal) |
+| `example/tanstack-query` | TanStack Query kept from an existing SPA: per-request `QueryClient`, `prefetchQuery` + `dehydrate` in loaders, a pending detail query streamed through `useSuspenseQuery`, `HydrationBoundary` on the client, with cache and browser tests | Keep TanStack Query and add SSR | [Browse](https://github.com/Lomray-Software/vite-template/tree/example/tanstack-query) |
 | `example/custom-server` | Development through the managed CLI, production through an application-owned Fastify server with static assets, compression and Early Hints; dual export of the managed entry and a Fetch handler | Own the production server | [Browse](https://github.com/Lomray-Software/vite-template/tree/example/custom-server) |
 | `example/localization` | i18next with the language chosen on the server from the cookie or Accept-Language, transferred to the client before hydration, and a cookie-based switcher | Add localization | [Browse](https://github.com/Lomray-Software/vite-template/tree/example/localization) |
 
