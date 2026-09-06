@@ -87,6 +87,9 @@ const Home: FCRoute = () => {
           You are watching site like: <strong>{isCrawler ? 'Search bot' : 'Human'}</strong>
         </button>
         <p>
+          <Link to={RouteManager.makeURL('deferred')}>Deferred data</Link>
+        </p>
+        <p>
           <Link to={RouteManager.makeURL('details')}>How to works Suspense?</Link>
         </p>
         <p>

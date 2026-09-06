@@ -173,7 +173,7 @@ try {
   const config = JSON.parse(
     await readFile(new URL('./smoke.config.json', import.meta.url), 'utf8'),
   );
-  const { routes, streamPath, crawlerCookie } = config;
+  const { routes, streamPath, crawlerCookie, crawlerRoutes } = config;
 
   assert.ok(Array.isArray(routes) && routes.length > 0, 'Configure at least one smoke route.');
   assert.ok(typeof streamPath === 'string' && streamPath.startsWith('/'), 'Configure streamPath.');
@@ -184,7 +184,7 @@ try {
 
   await build();
   await withServer('SSR', [], async (origin) => {
-    for (const { path, status, contains = [], headers = {} } of routes) {
+    for (const { path, status, contains = [], containsAny = [], headers = {} } of routes) {
       const response = await inspect(origin, path, { headers });
 
       assert.equal(response.status, status, `SSR GET ${path}: expected status ${status}.`);
@@ -195,7 +195,14 @@ try {
         );
       }
 
-      console.info(`[smoke] SSR GET ${path}: ${status}; ${contains.length} content checks passed.`);
+      if (containsAny.length > 0) {
+        assert.ok(
+          containsAny.some((marker) => response.html.includes(marker)),
+          `SSR GET ${path}: expected one of ${JSON.stringify(containsAny)}.`,
+        );
+      }
+
+      console.info(`[smoke] SSR GET ${path}: ${status}; content checks passed.`);
     }
 
     const first = routes[0];
@@ -222,11 +229,25 @@ try {
       `SSR crawler ${streamPath}: pending Suspense boundary.`,
     );
     console.info(`[smoke] SSR crawler ${streamPath}: 200; no pending Suspense boundaries.`);
+
+    for (const { path, contains } of crawlerRoutes) {
+      const response = await inspect(origin, path, { headers: { 'User-Agent': 'Googlebot' } });
+
+      assert.equal(response.status, 200, `SSR Googlebot ${path}: expected status 200.`);
+      for (const marker of contains) {
+        assert.ok(response.html.includes(marker), `SSR Googlebot ${path}: missing ${marker}.`);
+      }
+      assert.ok(
+        !response.html.includes('<!--$?-->'),
+        `SSR Googlebot ${path}: pending Suspense boundary.`,
+      );
+      console.info(`[smoke] SSR Googlebot ${path}: 200; resolved users; no pending boundaries.`);
+    }
   });
 
   await build(['--focus-only', 'client']);
   await withServer('SPA', ['--focus-only', 'client'], async (origin) => {
-    for (const path of ['/', streamPath]) {
+    for (const path of ['/', streamPath, '/deferred']) {
       const response = await inspect(origin, path);
 
       assert.equal(response.status, 200, `SPA GET ${path}: expected status 200.`);
