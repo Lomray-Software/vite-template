@@ -1,34 +1,51 @@
 import { Meta } from '@lomray/react-head-manager';
+import { dehydrate, HydrationBoundary, useQuery } from '@tanstack/react-query';
 import type { FC } from 'react';
+import type { LoaderFunctionArgs } from 'react-router';
 import { Link, useLoaderData } from 'react-router';
-import users from '@data/users';
+import { usersQuery } from '@data/user-queries';
+import type { TGetQueryClient } from '@helpers/query-client';
 
-export const loader = async () => {
-  await new Promise((resolve) => {
-    setTimeout(resolve, 300);
-  });
+export const createLoader =
+  (getQueryClient: TGetQueryClient) => async (args: LoaderFunctionArgs) => {
+    const queryClient = await getQueryClient(args);
 
-  return users;
+    await queryClient.prefetchQuery(usersQuery);
+
+    return { dehydratedState: dehydrate(queryClient) };
+  };
+
+const UsersList: FC = () => {
+  const { data = [] } = useQuery(usersQuery);
+
+  return (
+    <ul>
+      {data.map((user) => (
+        <li key={user.id}>
+          <Link to={`/users/${user.id}`}>{user.name}</Link>
+        </li>
+      ))}
+    </ul>
+  );
 };
 
 const Users: FC = () => {
-  const data = useLoaderData<typeof loader>();
+  const { dehydratedState } = useLoaderData<ReturnType<typeof createLoader>>();
 
   return (
     <>
       <Meta>
-        <title>Users | Minimal SSR example</title>
-        <meta name="description" content="Users loaded before the server sends the page." />
+        <title>Users | TanStack Query SSR example</title>
+        <meta
+          name="description"
+          content="A prefetched TanStack Query list, ready before rendering."
+        />
       </Meta>
       <h1>Users</h1>
-      <p>The loader waits 300 ms, then returns this list as resolved data.</p>
-      <ul>
-        {data.map((user) => (
-          <li key={user.id}>
-            <Link to={`/users/${user.id}`}>{user.name}</Link>
-          </li>
-        ))}
-      </ul>
+      <p>The loader awaits prefetchQuery. This list stays fresh in the cache for 60 seconds.</p>
+      <HydrationBoundary state={dehydratedState}>
+        <UsersList />
+      </HydrationBoundary>
     </>
   );
 };

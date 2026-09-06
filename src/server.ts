@@ -3,12 +3,15 @@ import MetaServer from '@lomray/react-head-manager/server';
 import entryServer from '@lomray/vite-ssr-boost/adapters/express/entry';
 import { isbot } from 'isbot';
 import StateKey from '@constants/state-key';
+import createQueryClient from '@helpers/query-client';
 import routes from '@routes/index';
 import App from './app';
 
 export default entryServer(App, routes, {
   init: () => ({
-    onRequest: () => ({ appProps: { metaManager: new MetaManager() } }),
+    onRequest: () => ({
+      appProps: { metaManager: new MetaManager(), queryClient: createQueryClient() },
+    }),
     onRouterReady: ({ context: { request } }) => ({
       isStream:
         !isbot(request.headers.get('user-agent') ?? '') &&

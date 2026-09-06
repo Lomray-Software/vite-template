@@ -1,8 +1,9 @@
 import { appendFile, readFile, readdir } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 
-// After an intentional size change, rebuild and set ceil(total gzip bytes * 1.05 / 1024).
-const SIZE_BUDGET_GZIP_KB = 103;
+// Fixed SSR build baseline. Re-measure only after an intentional size change.
+const MEASURED_GZIP_BYTES = 110520;
+const SIZE_BUDGET_GZIP_BYTES = Math.ceil(MEASURED_GZIP_BYTES * 1.05);
 
 const assets = new URL('../build/client/assets/', import.meta.url);
 const files = (await readdir(assets)).filter((file) => file.endsWith('.js')).sort();
@@ -30,7 +31,7 @@ const summary = [
   ...rows,
   '',
   `Total gzip: **${totalGzip} bytes (${(totalGzip / 1024).toFixed(2)} KB)**.`,
-  `Budget: **${SIZE_BUDGET_GZIP_KB} KB (${SIZE_BUDGET_GZIP_KB * 1024} bytes)**; 1 KB = 1024 bytes.`,
+  `Budget: **${(SIZE_BUDGET_GZIP_BYTES / 1024).toFixed(2)} KB (${SIZE_BUDGET_GZIP_BYTES} bytes)**; 1 KB = 1024 bytes.`,
   '',
 ].join('\n');
 
@@ -40,7 +41,7 @@ if (process.env.GITHUB_STEP_SUMMARY) {
   await appendFile(process.env.GITHUB_STEP_SUMMARY, `${summary}\n`);
 }
 
-if (totalGzip > SIZE_BUDGET_GZIP_KB * 1024) {
+if (totalGzip > SIZE_BUDGET_GZIP_BYTES) {
   console.error('Client JavaScript exceeds the gzip size budget.');
   process.exitCode = 1;
 }

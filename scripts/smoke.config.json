@@ -3,7 +3,7 @@
     {
       "path": "/",
       "status": 200,
-      "contains": ["Minimal SSR example", "window.__staticRouterHydrationData"]
+      "contains": ["TanStack Query SSR example", "window.__staticRouterHydrationData"]
     },
     {
       "path": "/deferred",
@@ -15,6 +15,11 @@
       "path": "/users",
       "status": 200,
       "contains": ["Ada Lovelace"]
+    },
+    {
+      "path": "/users/2",
+      "status": 200,
+      "contains": ["Loading user", "<h1>Grace Hopper</h1>"]
     },
     {
       "path": "/users/999",
@@ -38,9 +43,13 @@
       "status": 404
     }
   ],
-  "streamPath": "/about",
+  "streamPath": "/users/2",
   "crawlerCookie": "isCrawler=1",
   "crawlerRoutes": [
+    {
+      "path": "/users/2",
+      "contains": ["<h1>Grace Hopper</h1>", "Computer scientist"]
+    },
     {
       "path": "/deferred",
       "contains": ["<li>Ada Lovelace</li>", "<li>Grace Hopper</li>", "<li>Margaret Hamilton</li>"]

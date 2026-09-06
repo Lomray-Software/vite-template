@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: ${{ github.event_name == 'schedule' && fromJSON('["prod", "example/minimal", "example/custom-server", "example/localization"]') || fromJSON(format('["{0}"]', github.ref_name)) }}
+        branch: ${{ github.event_name == 'schedule' && fromJSON('["prod", "example/minimal", "example/tanstack-query", "example/custom-server", "example/localization"]') || fromJSON(format('["{0}"]', github.ref_name)) }}
     concurrency:
       group: ${{ matrix.branch }}-check-example
       cancel-in-progress: true
@@ -80,6 +80,18 @@ jobs:
       - name: Build check
         if: steps.branch.outputs.exists == 'true'
         run: npm run build -- --throw-warnings
+
+      - name: Query cache and size checks
+        if: steps.branch.outputs.exists == 'true' && matrix.branch == 'example/tanstack-query'
+        run: |
+          npm run test:query
+          npm run size:check
+
+      - name: Browser query checks
+        if: steps.branch.outputs.exists == 'true' && matrix.branch == 'example/tanstack-query'
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:browser
 
       - name: Smoke check
         if: steps.branch.outputs.exists == 'true'

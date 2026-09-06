@@ -1,18 +1,41 @@
 import { Meta } from '@lomray/react-head-manager';
+import { dehydrate, HydrationBoundary, useSuspenseQuery } from '@tanstack/react-query';
 import type { FC } from 'react';
+import { Suspense } from 'react';
 import type { LoaderFunctionArgs } from 'react-router';
-import { isRouteErrorResponse, Link, useLoaderData, useRouteError } from 'react-router';
+import { isRouteErrorResponse, Link, useLoaderData, useParams, useRouteError } from 'react-router';
+import { userQuery, usersQuery } from '@data/user-queries';
 import users from '@data/users';
+import type { TGetQueryClient } from '@helpers/query-client';
+import { STALE_TIME } from '@helpers/query-client';
 
-export const loader = ({ params }: LoaderFunctionArgs) => {
-  const user = users.find(({ id }) => id === params.id);
+export const createLoader =
+  (getQueryClient: TGetQueryClient) => async (args: LoaderFunctionArgs) => {
+    const id = args.params.id ?? '';
 
-  if (!user) {
-    throw new Response('Not found', { status: 404 });
-  }
+    // Validate before returning the pending query so unknown IDs retain an HTTP 404.
+    if (!users.some((user) => user.id === id)) {
+      throw new Response('Not found', { status: 404 });
+    }
 
-  return user;
-};
+    const queryClient = await getQueryClient(args);
+    const options = userQuery(id);
+    const list = queryClient.getQueryState(usersQuery.queryKey);
+    const cachedUser = list?.data?.find((user) => user.id === id);
+
+    // The list contains complete profiles. Reuse it without extending its freshness.
+    if (cachedUser && list && !list.isInvalidated && Date.now() - list.dataUpdatedAt < STALE_TIME) {
+      const detailUpdatedAt = queryClient.getQueryState(options.queryKey)?.dataUpdatedAt ?? 0;
+
+      if (list.dataUpdatedAt > detailUpdatedAt) {
+        queryClient.setQueryData(options.queryKey, cachedUser, { updatedAt: list.dataUpdatedAt });
+      }
+    }
+
+    void queryClient.prefetchQuery(options);
+
+    return { dehydratedState: dehydrate(queryClient) };
+  };
 
 export const ErrorBoundary: FC = () => {
   const error = useRouteError();
@@ -21,7 +44,9 @@ export const ErrorBoundary: FC = () => {
   return (
     <>
       <Meta>
-        <title>{isNotFound ? 'User not found' : 'Unable to load user'} | Minimal SSR example</title>
+        <title>
+          {isNotFound ? 'User not found' : 'Unable to load user'} | TanStack Query SSR example
+        </title>
         <meta name="description" content="The requested user could not be loaded." />
       </Meta>
       <h1>{isNotFound ? 'User not found' : 'Unable to load user'}</h1>
@@ -31,18 +56,36 @@ export const ErrorBoundary: FC = () => {
   );
 };
 
+const UserDetails: FC = () => {
+  const { id = '' } = useParams();
+  const { data: user } = useSuspenseQuery(userQuery(id));
+
+  return (
+    <>
+      <h1>{user.name}</h1>
+      <p>{user.role}</p>
+      <Link to="/users">Back to users</Link>
+    </>
+  );
+};
+
 const User: FC = () => {
-  const user = useLoaderData<typeof loader>();
+  const { dehydratedState } = useLoaderData<ReturnType<typeof createLoader>>();
 
   return (
     <>
       <Meta>
-        <title>{user.name} | Minimal SSR example</title>
-        <meta name="description" content={`${user.name}, ${user.role}.`} />
+        <title>User profile | TanStack Query SSR example</title>
+        <meta name="description" content="A user profile streamed into the TanStack Query cache." />
       </Meta>
-      <h1>{user.name}</h1>
-      <p>{user.role}</p>
-      <Link to="/users">Back to users</Link>
+      <p>
+        Direct visits stream the profile after 800 ms. A fresh users list supplies it from cache.
+      </p>
+      <HydrationBoundary state={dehydratedState}>
+        <Suspense fallback={<p role="status">Loading user…</p>}>
+          <UserDetails />
+        </Suspense>
+      </HydrationBoundary>
     </>
   );
 };

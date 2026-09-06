@@ -1,5 +1,5 @@
 {
-  "name": "@lomray/vite-template",
+  "name": "vite-template-tanstack-query",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -16,11 +16,15 @@
     "style:format": "stylelint --fix \"src/**/*.{css,scss}\"",
     "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
     "prepare": "husky",
-    "size:check": "node scripts/size-budget.mjs"
+    "size:check": "node scripts/size-budget.mjs",
+    "test:query": "node --test tests/query-cache.test.mjs",
+    "test:browser": "playwright test",
+    "test:stream": "node scripts/query-stream-check.mjs"
   },
   "dependencies": {
     "@lomray/react-head-manager": "^2.2.0",
     "@lomray/vite-ssr-boost": "^8.3.0",
+    "@tanstack/react-query": "^5.102.8",
     "isbot": "^5.2.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -32,6 +36,7 @@
     "@lomray/eslint-config-react": "^7.0.0",
     "@lomray/prettier-config": "^3.0.0",
     "@lomray/stylelint-config": "^3.0.0",
+    "@playwright/test": "^1.63.0",
     "@semantic-release/exec": "^7.1.0",
     "@types/node": "^22.20.1",
     "@types/react": "^19.2.18",

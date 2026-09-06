@@ -7,6 +7,7 @@ import net from 'node:net';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as delay } from 'node:timers/promises';
 import { createGunzip } from 'node:zlib';
+import { verifyQueryStreaming } from './query-stream-check.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const cli = fileURLToPath(
@@ -184,6 +185,7 @@ try {
 
   await build();
   await withServer('SSR', [], async (origin) => {
+    await verifyQueryStreaming(origin);
     for (const { path, status, contains = [], containsAny = [], headers = {} } of routes) {
       const response = await inspect(origin, path, { headers });
 
@@ -247,7 +249,7 @@ try {
 
   await build(['--focus-only', 'client']);
   await withServer('SPA', ['--focus-only', 'client'], async (origin) => {
-    for (const path of ['/', streamPath, '/deferred']) {
+    for (const path of ['/', '/users', streamPath, '/deferred']) {
       const response = await inspect(origin, path);
 
       assert.equal(response.status, 200, `SPA GET ${path}: expected status 200.`);

@@ -5,14 +5,14 @@ import { Link } from 'react-router';
 const Home: FC = () => (
   <>
     <Meta>
-      <title>Home | Minimal SSR example</title>
+      <title>Home | TanStack Query SSR example</title>
       <meta
         name="description"
-        content="A minimal React app with server rendering and route loaders."
+        content="Keep TanStack Query while adding streamed server rendering to a React app."
       />
     </Meta>
-    <h1>Minimal SSR example</h1>
-    <p>React routes, server-rendered HTML, and the same app in your browser.</p>
+    <h1>TanStack Query SSR example</h1>
+    <p>Prefetched lists, streamed profiles, and the same query cache in your browser.</p>
     <ul>
       <li>
         <Link to="/deferred">Deferred data</Link>
