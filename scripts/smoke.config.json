@@ -17,13 +17,23 @@
       "contains": ["Ada Lovelace"]
     },
     {
+      "path": "/users/2",
+      "status": 200,
+      "contains": ["<h1>Grace Hopper</h1>"]
+    },
+    {
+      "path": "/kv",
+      "status": 200,
+      "contains": ["KV message", "No greeting in KV yet."]
+    },
+    {
       "path": "/users/999",
       "status": 404
     },
     {
       "path": "/about",
       "status": 200,
-      "contains": ["rel=\"stylesheet\""]
+      "contains": ["rel=\"stylesheet\"", "/assets/about-"]
     },
     {
       "path": "/redirect",
@@ -45,5 +55,10 @@
       "path": "/deferred",
       "contains": ["<li>Ada Lovelace</li>", "<li>Grace Hopper</li>", "<li>Margaret Hamilton</li>"]
     }
-  ]
+  ],
+  "worker": {
+    "streamPath": "/deferred",
+    "resolveFrames": 1,
+    "kvMessage": "Hello from local Worker KV"
+  }
 }

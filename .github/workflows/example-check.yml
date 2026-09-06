@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        branch: ${{ github.event_name == 'schedule' && fromJSON('["prod", "example/minimal", "example/custom-server", "example/localization"]') || fromJSON(format('["{0}"]', github.ref_name)) }}
+        branch: ${{ github.event_name == 'schedule' && fromJSON('["prod", "example/minimal", "example/tanstack-query", "example/cloudflare", "example/custom-server", "example/localization"]') || fromJSON(format('["{0}"]', github.ref_name)) }}
     concurrency:
       group: ${{ matrix.branch }}-check-example
       cancel-in-progress: true
@@ -84,3 +84,16 @@ jobs:
       - name: Smoke check
         if: steps.branch.outputs.exists == 'true'
         run: npm run smoke
+
+      - name: Wrangler preview, size and deploy bundle checks
+        if: steps.branch.outputs.exists == 'true' && matrix.branch == 'example/cloudflare'
+        run: |
+          npm run smoke:worker
+          npm run size:check
+          npx --no-install wrangler deploy --dry-run
+
+      - name: Browser Worker checks
+        if: steps.branch.outputs.exists == 'true' && matrix.branch == 'example/cloudflare'
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:browser

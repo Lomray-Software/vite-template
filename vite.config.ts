@@ -11,5 +11,11 @@ export default defineConfig({
   build: {
     outDir: '../build',
   },
-  plugins: [devtoolsJson(), SsrBoost(), react()],
+  plugins: [
+    devtoolsJson(),
+    SsrBoost({
+      entrypoint: [{ name: 'worker', type: 'ssr', serverFile: 'worker.ts' }],
+    }),
+    react(),
+  ],
 });

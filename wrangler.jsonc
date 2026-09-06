@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "vite-template-cloudflare",
+  "main": "build/worker/worker.js",
+  "compatibility_date": "2026-09-05",
+  // Head metadata parsing needs the string parser, not the browser DOM implementation.
+  "alias": {
+    "html-dom-parser": "html-dom-parser/lib/server/html-to-dom"
+  },
+  "assets": {
+    "directory": "build/client",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "html_handling": "none",
+    "not_found_handling": "none"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "MESSAGES",
+      // Local preview works with this placeholder. Replace it before deploying.
+      "id": "00000000000000000000000000000000"
+    }
+  ]
+}

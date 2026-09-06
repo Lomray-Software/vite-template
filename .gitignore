@@ -23,3 +23,7 @@ build
 *.sln
 *.sw?
 .vercel
+.wrangler
+.dev.vars*
+playwright-report
+test-results

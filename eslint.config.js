@@ -35,4 +35,18 @@ export default [
       'no-restricted-imports': 'off',
     },
   },
+  {
+    files: ['src/worker.ts'],
+    rules: {
+      // This manifest does not exist until the first client build.
+      'import-x/no-unresolved': ['error', { ignore: ['^../build/client/assets-manifest\\.json$'] }],
+    },
+    languageOptions: {
+      globals: { ExportedHandler: 'readonly' },
+      parserOptions: {
+        projectService: false,
+        project: './tsconfig.worker.json',
+      },
+    },
+  },
 ];

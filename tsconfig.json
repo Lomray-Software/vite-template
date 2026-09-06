@@ -35,5 +35,6 @@
     }
   },
   "include": ["src", "types", "eslint.config.js"],
+  "exclude": ["src/worker.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

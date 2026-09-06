@@ -10,6 +10,6 @@ export const Component: FC = () => (
     </Meta>
     <h1>Client only</h1>
     <p>This page is now running in your browser.</p>
-    <p>Browser language: {window.navigator.language}</p>
+    <p>Browser language: {navigator.language}</p>
   </>
 );

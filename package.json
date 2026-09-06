@@ -1,5 +1,5 @@
 {
-  "name": "@lomray/vite-template",
+  "name": "vite-template-cloudflare",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -14,24 +14,31 @@
     "lint:format": "eslint --fix \"src/**/*.{ts,tsx,*.ts,*tsx}\"",
     "style:check": "stylelint \"src/**/*.{css,scss}\"",
     "style:format": "stylelint --fix \"src/**/*.{css,scss}\"",
-    "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
+    "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noEmit && tsc --project ./tsconfig.worker.json --noEmit",
     "prepare": "husky",
-    "size:check": "node scripts/size-budget.mjs"
+    "size:check": "node scripts/size-budget.mjs",
+    "build:worker": "ssr-boost build --focus-only all",
+    "preview:worker": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "smoke:worker": "node scripts/smoke.mjs --worker-only",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "@lomray/react-head-manager": "^2.2.0",
-    "@lomray/vite-ssr-boost": "^8.3.0",
+    "@lomray/vite-ssr-boost": "^8.4.0",
     "isbot": "^5.2.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router": "^8.3.1"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260906.1",
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@lomray/eslint-config-react": "^7.0.0",
     "@lomray/prettier-config": "^3.0.0",
     "@lomray/stylelint-config": "^3.0.0",
+    "@playwright/test": "^1.63.0",
     "@semantic-release/exec": "^7.1.0",
     "@types/node": "^22.20.1",
     "@types/react": "^19.2.18",
@@ -47,6 +54,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.69.0",
     "vite": "^8.2.2",
-    "vite-plugin-devtools-json": "^1.1.0"
+    "vite-plugin-devtools-json": "^1.1.0",
+    "wrangler": "^4.129.0"
   }
 }

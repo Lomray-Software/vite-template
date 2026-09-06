@@ -2,6 +2,7 @@ import { appendFile, readFile, readdir } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 
 // After an intentional size change, rebuild and set ceil(total gzip bytes * 1.05 / 1024).
+// Cloudflare example: ceil(100088 * 1.05 / 1024) = 103 KB.
 const SIZE_BUDGET_GZIP_KB = 103;
 
 const assets = new URL('../build/client/assets/', import.meta.url);
