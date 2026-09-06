@@ -52,7 +52,13 @@ const Home: FCRoute = () => {
       </div>
       <div className={styles.logos}>
         <a href="https://vitejs.dev/" target="_blank" rel="nofollow">
-          <img src="/vite.svg" width={256} height={257} className={styles.logo} alt="Vite logo" />
+          <img
+            src={`${import.meta.env.BASE_URL}vite.svg`}
+            width={256}
+            height={257}
+            className={styles.logo}
+            alt="Vite logo"
+          />
         </a>
         <a href="https://react.dev" target="_blank" rel="nofollow">
           <img
