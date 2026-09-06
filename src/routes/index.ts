@@ -12,6 +12,7 @@ const routes = [
     children: [
       { path: '/', Component: Home },
       { path: '/users', Component: Users, loader: usersLoader },
+      { path: '/deferred', lazy: () => import('@pages/deferred') },
       { path: '/users/:id', Component: User, loader: userLoader, ErrorBoundary },
       { path: '/about', lazy: () => import('@pages/about') },
       { path: '/redirect', Component: Redirect },
