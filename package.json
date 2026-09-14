@@ -59,7 +59,7 @@
     "sass": "^1.104.0",
     "semantic-release": "^25.0.9",
     "stylelint": "^17.15.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "typescript-eslint": "^8.69.0",
     "vite": "^8.2.2",
     "vite-bundle-visualizer": "^1.2.1",
