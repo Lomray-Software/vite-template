@@ -1,0 +1,45 @@
+name: Merge Dependabot updates
+
+# Runs from the default branch after "Check PR" succeeds, so one file covers prod and every example branch.
+on:
+  workflow_run:
+    workflows: [ Check PR ]
+    types: [ completed ]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      startsWith(github.event.workflow_run.head_branch, 'dependabot/')
+    runs-on: ubuntu-latest
+
+    steps:
+      # Only grouped updates merge on their own: "lomray" and "non-major".
+      # Anything Dependabot opens outside a group is a major update and stays for a manual review.
+      - name: Merge the grouped update
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          case "$HEAD_BRANCH" in
+            */lomray-*|*/non-major-*) ;;
+            *) echo "Not a grouped update: $HEAD_BRANCH"; exit 0 ;;
+          esac
+
+          pull_request=$(gh pr list --repo "$REPOSITORY" --head "$HEAD_BRANCH" --state open \
+            --json number,author,headRefOid \
+            --jq '.[] | select(.author.login == "app/dependabot" and .headRefOid == env.HEAD_SHA) | .number')
+
+          if [ -z "$pull_request" ]; then
+            echo "No open Dependabot pull request at $HEAD_SHA"
+            exit 0
+          fi
+
+          gh pr merge "$pull_request" --repo "$REPOSITORY" --squash --match-head-commit "$HEAD_SHA"
