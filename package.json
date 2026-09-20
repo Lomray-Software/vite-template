@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@lomray/react-head-manager": "^2.2.1",
-    "@lomray/vite-ssr-boost": "^8.4.0",
+    "@lomray/vite-ssr-boost": "^8.4.2",
     "isbot": "^5.2.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
