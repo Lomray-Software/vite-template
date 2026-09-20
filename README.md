@@ -66,7 +66,7 @@ __NOTE: see .github for understand CI/CD__
 2. Create Pull Request & test
 3. Squash & merge into `prod`
 
-Dependabot checks dependencies every Monday morning and opens grouped update PRs for `prod` and the three example branches.
+Dependabot checks dependencies every Monday morning and opens grouped update PRs for `prod` and every example branch. Grouped updates (`@lomray/*` and other minor/patch versions) merge on their own once `Check PR` passes; major updates stay open for a manual review.
 
 PR and example checks run `npm run size:check` after building; the script lists client JavaScript gzip sizes and enforces the budget in `scripts/size-budget.mjs` (1 KB = 1024 bytes).
 After an intentional bundle change, rebuild and set that branch's budget to the measured gzip total plus 5%, rounded up to a whole KB.
