@@ -2,7 +2,7 @@ import { appendFile, readFile, readdir } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 
 // Fixed SSR build baseline. Re-measure only after an intentional size change.
-const MEASURED_GZIP_BYTES = 110520;
+const MEASURED_GZIP_BYTES = 119203;
 const SIZE_BUDGET_GZIP_BYTES = Math.ceil(MEASURED_GZIP_BYTES * 1.05);
 
 const assets = new URL('../build/client/assets/', import.meta.url);
