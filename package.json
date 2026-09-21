@@ -32,7 +32,7 @@
     "react-router": "^8.4.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260917.1",
+    "@cloudflare/workers-types": "^5.20260918.1",
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@lomray/eslint-config-react": "^7.0.0",
@@ -48,7 +48,7 @@
     "globals": "^17.12.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.5.1",
-    "prettier": "^3.9.7",
+    "prettier": "^3.9.8",
     "semantic-release": "^25.0.9",
     "stylelint": "^17.15.0",
     "typescript": "^6.0.3",
