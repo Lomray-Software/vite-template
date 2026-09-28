@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "@fastify/static": "^10.1.4",
-    "@lomray/react-head-manager": "^2.2.1",
-    "@lomray/vite-ssr-boost": "^8.4.2",
+    "@lomray/react-head-manager": "^2.2.5",
+    "@lomray/vite-ssr-boost": "^8.6.0",
     "fastify": "^5.12.5",
     "isbot": "^5.2.2",
     "react": "^19.3.0",
