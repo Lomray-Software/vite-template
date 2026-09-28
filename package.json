@@ -21,11 +21,11 @@
     "size:check": "node scripts/size-budget.mjs"
   },
   "dependencies": {
-    "@lomray/consistent-suspense": "^2.0.9",
-    "@lomray/react-head-manager": "^2.2.1",
-    "@lomray/react-mobx-manager": "^4.5.1",
+    "@lomray/consistent-suspense": "^2.0.10",
+    "@lomray/react-head-manager": "^2.2.5",
+    "@lomray/react-mobx-manager": "^4.5.5",
     "@lomray/react-route-manager": "^2.0.0",
-    "@lomray/vite-ssr-boost": "^8.4.4",
+    "@lomray/vite-ssr-boost": "^8.6.0",
     "axios": "^1.20.0",
     "classnames": "^2.5.1",
     "cookie-parser": "^1.4.7",
