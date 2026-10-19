@@ -21,11 +21,11 @@
   "dependencies": {
     "@lomray/react-head-manager": "^2.2.5",
     "@lomray/vite-ssr-boost": "^8.6.0",
-    "i18next": "^26.4.2",
+    "i18next": "^26.4.7",
     "isbot": "^5.2.2",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
-    "react-i18next": "^17.0.16",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-i18next": "^17.0.19",
     "react-router": "^8.4.0"
   },
   "devDependencies": {
@@ -43,12 +43,12 @@
     "globals": "^17.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
-    "prettier": "^3.9.9",
+    "prettier": "^3.9.10",
     "semantic-release": "^25.0.9",
     "stylelint": "^17.16.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.1",
+    "typescript-eslint": "^8.71.2",
     "vite": "^8.3.4",
-    "vite-plugin-devtools-json": "^1.1.1"
+    "vite-plugin-devtools-json": "^1.1.2"
   }
 }
