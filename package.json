@@ -33,8 +33,8 @@
     "js-cookie": "^3.0.8",
     "mobx": "^7.0.6",
     "mobx-react-lite": "^5.1.0",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "react-loading-skeleton": "^3.5.0",
     "react-router": "^8.4.0"
   },
@@ -55,14 +55,14 @@
     "globals": "^17.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
-    "prettier": "^3.9.9",
-    "sass": "^1.105.1",
+    "prettier": "^3.9.10",
+    "sass": "^1.105.2",
     "semantic-release": "^25.0.9",
     "stylelint": "^17.16.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.1",
+    "typescript-eslint": "^8.71.2",
     "vite": "^8.3.4",
     "vite-bundle-visualizer": "^1.2.1",
-    "vite-plugin-devtools-json": "^1.1.1"
+    "vite-plugin-devtools-json": "^1.1.2"
   }
 }
