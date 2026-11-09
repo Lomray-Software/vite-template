@@ -46,7 +46,7 @@
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
     "semantic-release": "^25.0.9",
-    "stylelint": "^17.16.0",
+    "stylelint": "^18.0.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.1",
     "vite": "^8.3.6",
