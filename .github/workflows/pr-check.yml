@@ -31,7 +31,9 @@ jobs:
         run: npm run audit:check
 
       - name: Commit lint PR title
-        run: echo "${{ github.event.pull_request.title }}" | npx --no-install commitlint -g commitlint.config.js
+        run: printf '%s\n' "$PR_TITLE" | npx --no-install commitlint -g commitlint.config.js
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
 
       - name: Check eslint
         run: npm run lint:check
