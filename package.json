@@ -19,7 +19,8 @@
     "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
     "prepare": "husky",
     "size:check": "node scripts/size-budget.mjs",
-    "audit:check": "node scripts/audit.mjs"
+    "audit:check": "node scripts/audit.mjs",
+    "audit:test": "node --test scripts/audit.test.mjs"
   },
   "dependencies": {
     "@lomray/consistent-suspense": "^2.0.10",
