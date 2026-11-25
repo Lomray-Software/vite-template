@@ -2,7 +2,9 @@ import { appendFile, readFile, readdir } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 
 // After an intentional size change, rebuild and set ceil(total gzip bytes * 1.05 / 1024).
-const SIZE_BUDGET_GZIP_KB = 158;
+// 168: measured 163310 bytes after axios 1.21 (+2.5 KB: response timing, header and runtime fixes),
+// React Router 8.5.3 and rolldown 1.2.19 (a separate runtime chunk).
+const SIZE_BUDGET_GZIP_KB = 168;
 
 const assets = new URL('../build/client/assets/', import.meta.url);
 const files = (await readdir(assets)).filter((file) => file.endsWith('.js')).sort();

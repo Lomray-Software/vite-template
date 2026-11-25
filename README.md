@@ -71,6 +71,8 @@ Dependabot checks dependencies every Monday morning and opens grouped update PRs
 PR and example checks run `npm run size:check` after building; the script lists client JavaScript gzip sizes and enforces the budget in `scripts/size-budget.mjs` (1 KB = 1024 bytes).
 After an intentional bundle change, rebuild and set that branch's budget to the measured gzip total plus 5%, rounded up to a whole KB.
 
+PR checks also run `npm run audit:check` (`scripts/audit.mjs`): any `npm audit` advisory at any severity fails the check, except the glob and minimatch advisories inside the npm CLI that `semantic-release` bundles (release tooling only, not overridable). The script warns when an allowance is no longer needed.
+
 The example workflow also runs Lighthouse weekly and on manual dispatch for `/` and `/details` on `prod`, and `/` and `/about` on `example/minimal`.
 The audit build unlocks robots with `--unlock-robots`, matching the production deploy.
 It measures each URL three times, requires performance of at least 90, warns below 90 for accessibility, best practices and SEO, and publishes reports and median category scores in the workflow artifacts and summary.

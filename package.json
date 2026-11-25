@@ -18,7 +18,8 @@
     "style:format": "stylelint --fix \"src/**/*.{css,scss}\"",
     "ts:check": "tsc --project ./tsconfig.json --skipLibCheck --noemit",
     "prepare": "husky",
-    "size:check": "node scripts/size-budget.mjs"
+    "size:check": "node scripts/size-budget.mjs",
+    "audit:check": "node scripts/audit.mjs"
   },
   "dependencies": {
     "@lomray/consistent-suspense": "^2.0.10",
@@ -26,17 +27,17 @@
     "@lomray/react-mobx-manager": "^4.6.0",
     "@lomray/react-route-manager": "^2.0.0",
     "@lomray/vite-ssr-boost": "^8.6.0",
-    "axios": "^1.20.0",
+    "axios": "^1.21.1",
     "classnames": "^2.5.1",
     "cookie-parser": "^1.4.7",
-    "isbot": "^5.2.2",
+    "isbot": "^5.2.4",
     "js-cookie": "^3.0.8",
-    "mobx": "^7.1.0",
-    "mobx-react-lite": "^5.1.0",
+    "mobx": "^7.1.7",
+    "mobx-react-lite": "^5.1.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-loading-skeleton": "^3.5.0",
-    "react-router": "^8.5.0"
+    "react-router": "^8.5.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
@@ -48,21 +49,29 @@
     "@types/cookie-parser": "^1.4.10",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.20.5",
-    "@types/react": "^19.3.0",
+    "@types/react": "^19.3.1",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "eslint": "^10.13.0",
-    "globals": "^17.13.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.6.0",
-    "prettier": "^3.9.10",
-    "sass": "^1.106.1",
+    "lint-staged": "^17.6.2",
+    "prettier": "^3.10.1",
+    "sass": "^1.108.2",
     "semantic-release": "^25.0.9",
     "stylelint": "^17.16.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.72.0",
-    "vite": "^8.3.5",
+    "typescript-eslint": "^8.74.0",
+    "vite": "^8.3.8",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-devtools-json": "^1.1.2"
+  },
+  "overrides": {
+    "eslint-plugin-sonarjs": {
+      "minimatch": "^11.0.1"
+    },
+    "eslint-plugin-jsx-a11y-x": {
+      "minimatch": "^11.0.1"
+    }
   }
 }
